@@ -1,13 +1,12 @@
 import { Routes, Route } from "react-router-dom";
 import { AnalyticPage, HomePage } from "./widgets/pages";
-import LogsPage from "./widgets/pages/LogsPage";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/analytic/qr" element={<AnalyticPage />} />
-      <Route path="/analytic" element={<LogsPage />} />
+      <Route path="/analytic" element={<AnalyticPage />} />
     </Routes>
   );
 }
