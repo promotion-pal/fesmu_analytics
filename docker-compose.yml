@@ -24,3 +24,7 @@ services:
       - "traefik.http.routers.init-web-secure.entrypoints=websecure"
       - "traefik.http.routers.init-web-secure.tls.certresolver=letsencrypt"
       - "traefik.http.services.init-web.loadbalancer.server.port=8040"
+
+networks:
+  traefik-network:
+    external: true
