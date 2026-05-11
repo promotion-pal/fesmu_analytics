@@ -17,7 +17,7 @@ func (rc *RouteConfig) guard(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("Пришел запрос: путь=%s, id=%s\n", currentPath, id)
 
-	if id != "" {
+	if id != "" && (currentPath == "/analytic/" || currentPath == "/analytic") {
 		fullURL := fmt.Sprintf("%s/analytic/qr?id=%s", rc.URL, id)
 		fmt.Printf("Редирект по ID: %s\n", fullURL)
 		http.Redirect(w, r, fullURL, http.StatusFound)
