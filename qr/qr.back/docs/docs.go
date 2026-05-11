@@ -9,15 +9,7 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "API Support",
-            "email": "support@qr-toilet.com"
-        },
-        "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
-        },
+        "contact": {},
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -25,14 +17,13 @@ const docTemplate = `{
     "paths": {
         "/api/toilets": {
             "get": {
-                "description": "Возвращает массив всех туалетов",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "toilets"
                 ],
-                "summary": "Получить список всех туалетов",
+                "summary": "Получить список туалетов",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -42,61 +33,19 @@ const docTemplate = `{
                                 "$ref": "#/definitions/models.Toilet"
                             }
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/toilets/ratings/{ratingId}": {
-            "delete": {
-                "description": "Удаляет оценку по ID",
-                "tags": [
-                    "ratings"
-                ],
-                "summary": "Удалить оценку",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "ID оценки",
-                        "name": "ratingId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
                     }
                 }
             }
         },
         "/api/toilets/{id}/ratings": {
             "get": {
-                "description": "Возвращает все оценки для указанного туалета",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "ratings"
                 ],
-                "summary": "Получить все оценки туалета",
+                "summary": "Получить оценки туалета",
                 "parameters": [
                     {
                         "type": "integer",
@@ -115,20 +64,10 @@ const docTemplate = `{
                                 "$ref": "#/definitions/models.ToiletRating"
                             }
                         }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
                     }
                 }
             },
             "post": {
-                "description": "Добавляет новую оценку для указанного туалета",
                 "consumes": [
                     "application/json"
                 ],
@@ -162,24 +101,6 @@ const docTemplate = `{
                         "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/models.ToiletRating"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
                         }
                     }
                 }
@@ -250,7 +171,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "localhost:8000",
-	BasePath:         "/api",
+	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "QR Toilet API",
 	Description:      "API для оценки состояния туалетов по QR кодам",

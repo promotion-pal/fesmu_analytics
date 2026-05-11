@@ -1,5 +1,6 @@
 services:
-  postgres:
+  # ==================== QR PROJECT ====================
+  qr-postgres:
     image: postgres:17
     container_name: "qr-db"
     env_file:
@@ -7,43 +8,173 @@ services:
     ports:
       - "${SERVER_POSTGRES_PORT}:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - qr_postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 5
     networks:
-      - qr-network
+      - traefik-network
+    restart: unless-stopped
 
-  back:
+  qr-back:
     container_name: "qr-back"
     build:
       context: ./qr.back
       dockerfile: Dockerfile
     depends_on:
-      postgres:
+      qr-postgres:
         condition: service_healthy
     ports:
       - "8000:8000"
     env_file:
       - .env
     networks:
-      - qr-network
+      - traefik-network
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.qr-api.rule=Host(`fesmu.promotion-pal.ru`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.qr-api.entrypoints=web"
+      - "traefik.http.routers.qr-api.middlewares=redirect-to-https"
+      - "traefik.http.routers.qr-api-secure.rule=Host(`fesmu.promotion-pal.ru`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.qr-api-secure.entrypoints=websecure"
+      - "traefik.http.routers.qr-api-secure.tls.certresolver=letsencrypt"
+      - "traefik.http.services.qr-api.loadbalancer.server.port=8000"
 
-  web:
+  qr-web:
     container_name: "qr-web"
     build:
       context: ./qr.web
       dockerfile: Dockerfile
-    ports:
-      - "4173:4173"
     networks:
-      - qr-network
+      - traefik-network
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.qr-web.rule=Host(`fesmu.promotion-pal.ru`)"
+      - "traefik.http.routers.qr-web.entrypoints=web"
+      - "traefik.http.routers.qr-web.middlewares=redirect-to-https"
+      - "traefik.http.routers.qr-web-secure.rule=Host(`fesmu.promotion-pal.ru`)"
+      - "traefik.http.routers.qr-web-secure.entrypoints=websecure"
+      - "traefik.http.routers.qr-web-secure.tls.certresolver=letsencrypt"
+      - "traefik.http.services.qr-web.loadbalancer.server.port=4173"
 
-networks:
-  qr-network:
-    driver: bridge
+  # ==================== JELLY PROJECT ====================
+  jelly-postgres:
+    container_name: "jelly-db"
+    image: postgres:17
+    env_file:
+      - .env
+    ports:
+      - "${SERVER_POSTGRES_PORT}:${POSTGRES_PORT}"
+    restart: always
+    volumes:
+      - jelly_postgres_data:/var/lib/postgresql/data
+    networks:
+      - traefik-network
+
+  jelly-back:
+    container_name: "jelly-back"
+    build:
+      context: "./jelly-back"
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    restart: unless-stopped
+    volumes:
+      - uploads_volume:/app/uploads
+    networks:
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jelly-api.rule=Host(`api.jelly.promotion-pal.ru`)"
+      - "traefik.http.routers.jelly-api.entrypoints=web"
+      - "traefik.http.routers.jelly-api.middlewares=redirect-to-https"
+      - "traefik.http.routers.jelly-api-secure.rule=Host(`api.jelly.promotion-pal.ru`)"
+      - "traefik.http.routers.jelly-api-secure.entrypoints=websecure"
+      - "traefik.http.routers.jelly-api-secure.tls.certresolver=letsencrypt"
+      - "traefik.http.services.jelly-api.loadbalancer.server.port=4000"
+
+  jelly-web:
+    container_name: "jelly-web"
+    build:
+      context: "./jelly-web"
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API=${NEXT_PUBLIC_API}
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jelly-web.rule=Host(`jelly.promotion-pal.ru`)"
+      - "traefik.http.routers.jelly-web.entrypoints=web"
+      - "traefik.http.routers.jelly-web.middlewares=redirect-to-https"
+      - "traefik.http.routers.jelly-web-secure.rule=Host(`jelly.promotion-pal.ru`)"
+      - "traefik.http.routers.jelly-web-secure.entrypoints=websecure"
+      - "traefik.http.routers.jelly-web-secure.tls.certresolver=letsencrypt"
+      - "traefik.http.services.jelly-web.loadbalancer.server.port=3000"
 
 volumes:
-  postgres_data:
+  qr_postgres_data:
+  jelly_postgres_data:
+  uploads_volume:
+
+networks:
+  traefik-network:
+    external: true
+    name: traefik-network
+
+# services:
+#   postgres:
+#     image: postgres:17
+#     container_name: "qr-db"
+#     env_file:
+#       - .env
+#     ports:
+#       - "${SERVER_POSTGRES_PORT}:5432"
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#     healthcheck:
+#       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+#       interval: 5s
+#       timeout: 5s
+#       retries: 5
+#     networks:
+#       - qr-network
+
+#   back:
+#     container_name: "qr-back"
+#     build:
+#       context: ./qr.back
+#       dockerfile: Dockerfile
+#     depends_on:
+#       postgres:
+#         condition: service_healthy
+#     ports:
+#       - "8000:8000"
+#     env_file:
+#       - .env
+#     networks:
+#       - qr-network
+
+#   web:
+#     container_name: "qr-web"
+#     build:
+#       context: ./qr.web
+#       dockerfile: Dockerfile
+#     ports:
+#       - "4173:4173"
+#     networks:
+#       - qr-network
+
+# networks:
+#   qr-network:
+#     driver: bridge
+
+# volumes:
+#   postgres_data:

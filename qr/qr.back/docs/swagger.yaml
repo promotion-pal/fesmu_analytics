@@ -1,4 +1,4 @@
-basePath: /api
+basePath: /
 definitions:
   models.Toilet:
     properties:
@@ -43,20 +43,13 @@ definitions:
     type: object
 host: localhost:8000
 info:
-  contact:
-    email: support@qr-toilet.com
-    name: API Support
+  contact: {}
   description: API для оценки состояния туалетов по QR кодам
-  license:
-    name: MIT
-    url: https://opensource.org/licenses/MIT
-  termsOfService: http://swagger.io/terms/
   title: QR Toilet API
   version: "1.0"
 paths:
   /api/toilets:
     get:
-      description: Возвращает массив всех туалетов
       produces:
       - application/json
       responses:
@@ -66,18 +59,11 @@ paths:
             items:
               $ref: '#/definitions/models.Toilet'
             type: array
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Получить список всех туалетов
+      summary: Получить список туалетов
       tags:
       - toilets
   /api/toilets/{id}/ratings:
     get:
-      description: Возвращает все оценки для указанного туалета
       parameters:
       - description: ID туалета
         in: path
@@ -93,19 +79,12 @@ paths:
             items:
               $ref: '#/definitions/models.ToiletRating'
             type: array
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Получить все оценки туалета
+      summary: Получить оценки туалета
       tags:
       - ratings
     post:
       consumes:
       - application/json
-      description: Добавляет новую оценку для указанного туалета
       parameters:
       - description: ID туалета
         in: path
@@ -125,40 +104,7 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/models.ToiletRating'
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
       summary: Добавить оценку туалету
-      tags:
-      - ratings
-  /api/toilets/ratings/{ratingId}:
-    delete:
-      description: Удаляет оценку по ID
-      parameters:
-      - description: ID оценки
-        in: path
-        name: ratingId
-        required: true
-        type: integer
-      responses:
-        "204":
-          description: No Content
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Удалить оценку
       tags:
       - ratings
 swagger: "2.0"

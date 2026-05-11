@@ -1,11 +1,77 @@
 # RatingsApi
 
-All URIs are relative to *http://localhost:8000/api*
+All URIs are relative to *http://localhost:8000*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
+| [**apiToiletsIdRatingsGet**](RatingsApi.md#apitoiletsidratingsget) | **GET** /api/toilets/{id}/ratings | Получить оценки туалета |
 | [**apiToiletsIdRatingsPost**](RatingsApi.md#apitoiletsidratingspost) | **POST** /api/toilets/{id}/ratings | Добавить оценку туалету |
 
+
+
+## apiToiletsIdRatingsGet
+
+> Array&lt;ModelsToiletRating&gt; apiToiletsIdRatingsGet(id)
+
+Получить оценки туалета
+
+### Example
+
+```ts
+import {
+  Configuration,
+  RatingsApi,
+} from '';
+import type { ApiToiletsIdRatingsGetRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new RatingsApi();
+
+  const body = {
+    // number | ID туалета
+    id: 56,
+  } satisfies ApiToiletsIdRatingsGetRequest;
+
+  try {
+    const data = await api.apiToiletsIdRatingsGet(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **id** | `number` | ID туалета | [Defaults to `undefined`] |
+
+### Return type
+
+[**Array&lt;ModelsToiletRating&gt;**](ModelsToiletRating.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
 ## apiToiletsIdRatingsPost
@@ -13,8 +79,6 @@ All URIs are relative to *http://localhost:8000/api*
 > ModelsToiletRating apiToiletsIdRatingsPost(id, rating)
 
 Добавить оценку туалету
-
-Добавляет новую оценку для указанного туалета
 
 ### Example
 
@@ -74,8 +138,6 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **201** | Created |  -  |
-| **400** | Bad Request |  -  |
-| **404** | Not Found |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 

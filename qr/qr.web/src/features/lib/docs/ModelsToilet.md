@@ -9,6 +9,7 @@ Name | Type
 `createdAt` | string
 `id` | number
 `name` | string
+`rating` | number
 `updatedAt` | string
 
 ## Example
@@ -21,6 +22,7 @@ const example = {
   "createdAt": 2026-05-11T10:00:00Z,
   "id": 1,
   "name": Центральный туалет,
+  "rating": 4.5,
   "updatedAt": 2026-05-11T10:00:00Z,
 } satisfies ModelsToilet
 

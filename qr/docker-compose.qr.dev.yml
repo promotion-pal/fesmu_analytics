@@ -1,0 +1,13 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: "qr-db"
+    env_file:
+      - .env
+    ports:
+      - "${SERVER_POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

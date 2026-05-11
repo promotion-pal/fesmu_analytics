@@ -6,9 +6,9 @@ import (
 )
 
 type Toilet struct {
-	ID        uint      `gorm:"primaryKey" json:"id" example:"1"`
-	Name      string    `gorm:"size:100;not null" json:"name" example:"Центральный туалет"`
-	Rating    float32   `gorm:"default:0" json:"rating" example:"4.5"`
+	ID   uint   `gorm:"primaryKey" json:"id" example:"1"`
+	Name string `gorm:"size:100;not null" json:"name" example:"Центральный туалет"`
+	// Rating    float32   `gorm:"default:0" json:"rating" example:"4.5"`
 	CreatedAt time.Time `json:"created_at" example:"2026-05-11T10:00:00Z"`
 	UpdatedAt time.Time `json:"updated_at" example:"2026-05-11T10:00:00Z"`
 }
@@ -16,7 +16,7 @@ type Toilet struct {
 type ToiletRating struct {
 	ID            uint      `gorm:"primaryKey" json:"id" example:"1"`
 	ToiletID      uint      `gorm:"not null;index" json:"toilet_id" example:"1"`
-	ConditionRoom int       `gorm:"not null" json:"condition_room" example:"8" minimum:"0" maximum:"10"`
+	ConditionRoom int       `gorm:"not null" json:"condition_room" example:"8" minimum:"0" maximum:"5"`
 	SoapAvailable bool      `json:"soap_available" example:"true"`
 	Comment       string    `gorm:"size:500" json:"comment" example:"Чисто, есть мыло"`
 	CreatedAt     time.Time `json:"created_at" example:"2026-05-11T10:00:00Z"`
