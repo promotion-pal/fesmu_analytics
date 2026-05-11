@@ -45,7 +45,7 @@ func main() {
 	http.HandleFunc("/", config.guard)
 
 	fmt.Println("Сервер запущен на http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8040", nil))
 }
 
 // https://fesmu.promotion-pal.ru/analytic/?id=7

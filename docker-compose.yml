@@ -23,4 +23,4 @@ services:
       - "traefik.http.routers.init-web-secure.rule=Host(`fesmu.promotion-pal.ru`)"
       - "traefik.http.routers.init-web-secure.entrypoints=websecure"
       - "traefik.http.routers.init-web-secure.tls.certresolver=letsencrypt"
-      - "traefik.http.services.init-web.loadbalancer.server.port=8080"
+      - "traefik.http.services.init-web.loadbalancer.server.port=8040"
