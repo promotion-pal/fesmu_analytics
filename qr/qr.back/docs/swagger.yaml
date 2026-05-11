@@ -11,9 +11,10 @@ definitions:
       name:
         example: Центральный туалет
         type: string
-      rating:
-        example: 4.5
-        type: number
+      ratings:
+        items:
+          $ref: '#/definitions/models.ToiletRating'
+        type: array
       updated_at:
         example: "2026-05-11T10:00:00Z"
         type: string
@@ -25,7 +26,7 @@ definitions:
         type: string
       condition_room:
         example: 8
-        maximum: 10
+        maximum: 5
         minimum: 0
         type: integer
       created_at:
@@ -34,9 +35,14 @@ definitions:
       id:
         example: 1
         type: integer
+      paper_available:
+        example: true
+        type: boolean
       soap_available:
         example: true
         type: boolean
+      toilet:
+        $ref: '#/definitions/models.Toilet'
       toilet_id:
         example: 1
         type: integer
@@ -48,6 +54,63 @@ info:
   title: QR Toilet API
   version: "1.0"
 paths:
+  /api/ratings:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ToiletRating'
+            type: array
+      summary: Получить все оценки (всех туалетов)
+      tags:
+      - ratings
+  /api/ratings/{id}:
+    delete:
+      parameters:
+      - description: ID оценки
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Удалить оценку
+      tags:
+      - ratings
+    get:
+      parameters:
+      - description: ID оценки
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ToiletRating'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Получить оценку по ID
+      tags:
+      - ratings
   /api/toilets:
     get:
       produces:
@@ -59,7 +122,108 @@ paths:
             items:
               $ref: '#/definitions/models.Toilet'
             type: array
-      summary: Получить список туалетов
+      summary: Получить все туалеты
+      tags:
+      - toilets
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Данные туалета
+        in: body
+        name: toilet
+        required: true
+        schema:
+          $ref: '#/definitions/models.Toilet'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Toilet'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Создать туалет
+      tags:
+      - toilets
+  /api/toilets/{id}:
+    delete:
+      parameters:
+      - description: ID туалета
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Удалить туалет
+      tags:
+      - toilets
+    get:
+      parameters:
+      - description: ID туалета
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Toilet'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Получить туалет по ID
+      tags:
+      - toilets
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID туалета
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Поля для обновления
+        in: body
+        name: updates
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Toilet'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Обновить туалет
       tags:
       - toilets
   /api/toilets/{id}/ratings:
@@ -79,7 +243,7 @@ paths:
             items:
               $ref: '#/definitions/models.ToiletRating'
             type: array
-      summary: Получить оценки туалета
+      summary: Получить все оценки туалета
       tags:
       - ratings
     post:
@@ -104,6 +268,12 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/models.ToiletRating'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
       summary: Добавить оценку туалету
       tags:
       - ratings

@@ -15,6 +15,94 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/ratings": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ratings"
+                ],
+                "summary": "Получить все оценки (всех туалетов)",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ToiletRating"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ratings/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ratings"
+                ],
+                "summary": "Получить оценку по ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID оценки",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ToiletRating"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ratings"
+                ],
+                "summary": "Удалить оценку",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID оценки",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/toilets": {
             "get": {
                 "produces": [
@@ -23,7 +111,7 @@ const docTemplate = `{
                 "tags": [
                     "toilets"
                 ],
-                "summary": "Получить список туалетов",
+                "summary": "Получить все туалеты",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -31,6 +119,160 @@ const docTemplate = `{
                             "type": "array",
                             "items": {
                                 "$ref": "#/definitions/models.Toilet"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "toilets"
+                ],
+                "summary": "Создать туалет",
+                "parameters": [
+                    {
+                        "description": "Данные туалета",
+                        "name": "toilet",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Toilet"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.Toilet"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/toilets/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "toilets"
+                ],
+                "summary": "Получить туалет по ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID туалета",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Toilet"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "toilets"
+                ],
+                "summary": "Обновить туалет",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID туалета",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Поля для обновления",
+                        "name": "updates",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Toilet"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "toilets"
+                ],
+                "summary": "Удалить туалет",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID туалета",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
                             }
                         }
                     }
@@ -45,7 +287,7 @@ const docTemplate = `{
                 "tags": [
                     "ratings"
                 ],
-                "summary": "Получить оценки туалета",
+                "summary": "Получить все оценки туалета",
                 "parameters": [
                     {
                         "type": "integer",
@@ -102,6 +344,15 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.ToiletRating"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
                     }
                 }
             }
@@ -123,9 +374,11 @@ const docTemplate = `{
                     "type": "string",
                     "example": "Центральный туалет"
                 },
-                "rating": {
-                    "type": "number",
-                    "example": 4.5
+                "ratings": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ToiletRating"
+                    }
                 },
                 "updated_at": {
                     "type": "string",
@@ -142,7 +395,7 @@ const docTemplate = `{
                 },
                 "condition_room": {
                     "type": "integer",
-                    "maximum": 10,
+                    "maximum": 5,
                     "minimum": 0,
                     "example": 8
                 },
@@ -154,9 +407,16 @@ const docTemplate = `{
                     "type": "integer",
                     "example": 1
                 },
+                "paper_available": {
+                    "type": "boolean",
+                    "example": true
+                },
                 "soap_available": {
                     "type": "boolean",
                     "example": true
+                },
+                "toilet": {
+                    "$ref": "#/definitions/models.Toilet"
                 },
                 "toilet_id": {
                     "type": "integer",

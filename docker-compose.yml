@@ -1,12 +1,4 @@
 services:
-  # init:
-  #   container_name: "init"
-  #   build:
-  #     context: ./init
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8080:8080"
-
   init:
     container_name: "init"
     build:
