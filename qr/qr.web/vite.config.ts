@@ -15,4 +15,10 @@ export default defineConfig({
     babel({ presets: [reactCompilerPreset()] }),
     tailwindcss(),
   ],
+
+  preview: {
+    host: true,
+    port: 4173,
+    allowedHosts: ["fesmu.promotion-pal.ru", "localhost", "127.0.0.1"],
+  },
 });
