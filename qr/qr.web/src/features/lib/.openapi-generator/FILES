@@ -1,0 +1,12 @@
+apis/RatingsApi.ts
+apis/ToiletsApi.ts
+apis/index.ts
+docs/ModelsToilet.md
+docs/ModelsToiletRating.md
+docs/RatingsApi.md
+docs/ToiletsApi.md
+index.ts
+models/ModelsToilet.ts
+models/ModelsToiletRating.ts
+models/index.ts
+runtime.ts
