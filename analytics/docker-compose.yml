@@ -15,7 +15,7 @@ services:
   back:
     container_name: "analytics-back"
     build:
-      context: "./analytics-back"
+      context: "./back"
       dockerfile: Dockerfile
     env_file:
       - .env
@@ -35,7 +35,7 @@ services:
   web:
     container_name: "analytics-web"
     build:
-      context: "./analytics-web"
+      context: "./web"
       dockerfile: Dockerfile
       args:
         - NEXT_PUBLIC_API=${NEXT_PUBLIC_API}
