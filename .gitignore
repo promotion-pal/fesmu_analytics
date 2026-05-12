@@ -1,3 +1,77 @@
+# Env files
 .env
+.env.local
+.env.*.local
 
+# Superset
 /superset
+
+# Analytics Web
+analytics/web/node_modules
+analytics/web/dist
+analytics/web/.next
+analytics/web/out
+analytics/web/build
+analytics/web/.cache
+
+# Analytics Back
+analytics/back/node_modules
+analytics/back/dist
+analytics/back/build
+analytics/back/.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.swp
+*.swo
+
+# IDE
+.vscode
+.idea
+*.sublime-*
+.project
+.classpath
+.settings/
+
+# Testing
+coverage
+.nyc_output
+*.lcov
+
+# Misc
+*.pem
+*.key
+*.crt
+.env*.local
+*.secret
+*.secrets
+
+# Docker
+docker-compose.override.yml
+*.pid
+*.seed
+
+# Temp files
+tmp
+temp
+.tmp
+.temp
+
+# Uploads
+uploads_volume
+*.upload

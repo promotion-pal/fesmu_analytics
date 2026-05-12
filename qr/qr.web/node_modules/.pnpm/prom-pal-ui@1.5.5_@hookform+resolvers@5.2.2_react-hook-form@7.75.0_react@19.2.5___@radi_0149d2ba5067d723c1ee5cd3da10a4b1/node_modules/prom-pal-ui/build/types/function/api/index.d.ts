@@ -1,1 +1,0 @@
-export { usePromPromiseQuery } from "./query";

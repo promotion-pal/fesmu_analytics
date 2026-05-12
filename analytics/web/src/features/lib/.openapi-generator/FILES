@@ -1,0 +1,11 @@
+.openapi-generator-ignore
+apis/AppApi.ts
+apis/DefaultApi.ts
+apis/index.ts
+docs/AppApi.md
+docs/CreateToiletRatingDto.md
+docs/DefaultApi.md
+index.ts
+models/CreateToiletRatingDto.ts
+models/index.ts
+runtime.ts
