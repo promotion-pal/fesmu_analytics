@@ -1,5 +1,5 @@
 const appConfig = {
-    name: 'ДВГМУ'
-}
+  name: "ДВГМУ",
+};
 
-export {appConfig}
+export { appConfig };
