@@ -8,15 +8,15 @@ export function AnalyticPage() {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
 
-  const [smellRating, setSmellRating] = useState<number>(3);
-  const [purityRating, setPurityRating] = useState<number>(3);
-  const [hasToiletPaper, setHasToiletPaper] = useState<boolean>(true);
-  const [hasSoap, setHasSoap] = useState<boolean>(true);
   const [comment, setComment] = useState<string>("");
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [hasSoap, setHasSoap] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState<number>(0);
+  const [smellRating, setSmellRating] = useState<number>(3);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [purityRating, setPurityRating] = useState<number>(3);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [hasToiletPaper, setHasToiletPaper] = useState<boolean>(true);
 
   const api = new DefaultApi(apiConfig);
 
@@ -53,24 +53,8 @@ export function AnalyticPage() {
 
   const questions: Question[] = [
     {
-      title: "👃 Оценка запаха",
-      description: "Насколько приятный/неприятный запах в туалете?",
-      value: smellRating,
-      setValue: setSmellRating,
-      type: "rating",
-      min: 1,
-      max: 5,
-      labels: {
-        1: "Очень неприятный",
-        2: "Неприятный",
-        3: "Нормально",
-        4: "Хорошо",
-        5: "Отлично, свежо",
-      },
-    },
-    {
-      title: "🧹 Оценка чистоты",
-      description: "Насколько чистый туалет?",
+      title: "🧹 Оцените чистоту",
+      description: "Насколько чистая туалетная комната?",
       value: purityRating,
       setValue: setPurityRating,
       type: "rating",
@@ -85,7 +69,23 @@ export function AnalyticPage() {
       },
     },
     {
-      title: "🧻 Туалетная бумага",
+      title: "👃 Оцените аромат",
+      description: "Насколько приятный/неприятный запах в помещении?",
+      value: smellRating,
+      setValue: setSmellRating,
+      type: "rating",
+      min: 1,
+      max: 5,
+      labels: {
+        1: "Очень неприятный",
+        2: "Неприятный",
+        3: "Нормально",
+        4: "Хорошо",
+        5: "Отлично, свежо",
+      },
+    },
+    {
+      title: "🧻 Наличие туалетной бумаги",
       description: "Есть ли туалетная бумага?",
       value: hasToiletPaper,
       setValue: setHasToiletPaper,
@@ -93,8 +93,8 @@ export function AnalyticPage() {
       options: { true: "✅ Есть", false: "❌ Нет" },
     },
     {
-      title: "🧼 Мыло",
-      description: "Есть ли мыло для рук?",
+      title: "🧼 Наличие мыло",
+      description: "Есть ли мыло?",
       value: hasSoap,
       setValue: setHasSoap,
       type: "boolean",
@@ -102,7 +102,7 @@ export function AnalyticPage() {
     },
     {
       title: "💬 Комментарий",
-      description: "Поделитесь впечатлениями (необязательно)",
+      description: "Как мы можем стать лучше (необязательно)",
       value: comment,
       setValue: setComment,
       type: "textarea",

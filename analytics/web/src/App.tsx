@@ -5,7 +5,6 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/analytic/qr" element={<AnalyticPage />} />
       <Route path="/analytic" element={<AnalyticPage />} />
     </Routes>
   );
