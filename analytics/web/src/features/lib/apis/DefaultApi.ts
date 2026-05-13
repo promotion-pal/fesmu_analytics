@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Jelly
+ * ДВГМУ Аналитика
  * API документация
  *
  * The version of the OpenAPI document: 1.0
@@ -14,18 +14,33 @@
 
 import * as runtime from '../runtime';
 import {
-    type CreateToiletRatingDto,
-    CreateToiletRatingDtoFromJSON,
-    CreateToiletRatingDtoToJSON,
-} from '../models/CreateToiletRatingDto';
+    type ToiletCreateDto,
+    ToiletCreateDtoFromJSON,
+    ToiletCreateDtoToJSON,
+} from '../models/ToiletCreateDto';
+import {
+    type ToiletCreateRatingDto,
+    ToiletCreateRatingDtoFromJSON,
+    ToiletCreateRatingDtoToJSON,
+} from '../models/ToiletCreateRatingDto';
+import {
+    type ToiletRatingResDto,
+    ToiletRatingResDtoFromJSON,
+    ToiletRatingResDtoToJSON,
+} from '../models/ToiletRatingResDto';
+import {
+    type ToiletResDto,
+    ToiletResDtoFromJSON,
+    ToiletResDtoToJSON,
+} from '../models/ToiletResDto';
 
 export interface ToiletsControllerAddRatingRequest {
     id: number;
-    createToiletRatingDto: CreateToiletRatingDto;
+    toiletCreateRatingDto: ToiletCreateRatingDto;
 }
 
 export interface ToiletsControllerCreateToiletRequest {
-    createToiletRatingDto: CreateToiletRatingDto;
+    toiletCreateDto: ToiletCreateDto;
 }
 
 export interface ToiletsControllerGetRatingsByToiletRequest {
@@ -52,10 +67,10 @@ export class DefaultApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['createToiletRatingDto'] == null) {
+        if (requestParameters['toiletCreateRatingDto'] == null) {
             throw new runtime.RequiredError(
-                'createToiletRatingDto',
-                'Required parameter "createToiletRatingDto" was null or undefined when calling toiletsControllerAddRating().'
+                'toiletCreateRatingDto',
+                'Required parameter "toiletCreateRatingDto" was null or undefined when calling toiletsControllerAddRating().'
             );
         }
 
@@ -74,24 +89,24 @@ export class DefaultApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateToiletRatingDtoToJSON(requestParameters['createToiletRatingDto']),
+            body: ToiletCreateRatingDtoToJSON(requestParameters['toiletCreateRatingDto']),
         };
     }
 
     /**
      * Добавить отзыв к туалету
      */
-    async toiletsControllerAddRatingRaw(requestParameters: ToiletsControllerAddRatingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateToiletRatingDto>> {
+    async toiletsControllerAddRatingRaw(requestParameters: ToiletsControllerAddRatingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ToiletRatingResDto>> {
         const requestOptions = await this.toiletsControllerAddRatingRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CreateToiletRatingDtoFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ToiletRatingResDtoFromJSON(jsonValue));
     }
 
     /**
      * Добавить отзыв к туалету
      */
-    async toiletsControllerAddRating(requestParameters: ToiletsControllerAddRatingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateToiletRatingDto> {
+    async toiletsControllerAddRating(requestParameters: ToiletsControllerAddRatingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ToiletRatingResDto> {
         const response = await this.toiletsControllerAddRatingRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -100,10 +115,10 @@ export class DefaultApi extends runtime.BaseAPI {
      * Creates request options for toiletsControllerCreateToilet without sending the request
      */
     async toiletsControllerCreateToiletRequestOpts(requestParameters: ToiletsControllerCreateToiletRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['createToiletRatingDto'] == null) {
+        if (requestParameters['toiletCreateDto'] == null) {
             throw new runtime.RequiredError(
-                'createToiletRatingDto',
-                'Required parameter "createToiletRatingDto" was null or undefined when calling toiletsControllerCreateToilet().'
+                'toiletCreateDto',
+                'Required parameter "toiletCreateDto" was null or undefined when calling toiletsControllerCreateToilet().'
             );
         }
 
@@ -121,24 +136,24 @@ export class DefaultApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateToiletRatingDtoToJSON(requestParameters['createToiletRatingDto']),
+            body: ToiletCreateDtoToJSON(requestParameters['toiletCreateDto']),
         };
     }
 
     /**
      * Создать новый туалет
      */
-    async toiletsControllerCreateToiletRaw(requestParameters: ToiletsControllerCreateToiletRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateToiletRatingDto>> {
+    async toiletsControllerCreateToiletRaw(requestParameters: ToiletsControllerCreateToiletRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ToiletResDto>> {
         const requestOptions = await this.toiletsControllerCreateToiletRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CreateToiletRatingDtoFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ToiletResDtoFromJSON(jsonValue));
     }
 
     /**
      * Создать новый туалет
      */
-    async toiletsControllerCreateToilet(requestParameters: ToiletsControllerCreateToiletRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateToiletRatingDto> {
+    async toiletsControllerCreateToilet(requestParameters: ToiletsControllerCreateToiletRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ToiletResDto> {
         const response = await this.toiletsControllerCreateToiletRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -165,17 +180,17 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * Получить все отзывы
      */
-    async toiletsControllerGetAllRatingsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<CreateToiletRatingDto>>> {
+    async toiletsControllerGetAllRatingsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ToiletRatingResDto>>> {
         const requestOptions = await this.toiletsControllerGetAllRatingsRequestOpts();
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(CreateToiletRatingDtoFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ToiletRatingResDtoFromJSON));
     }
 
     /**
      * Получить все отзывы
      */
-    async toiletsControllerGetAllRatings(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CreateToiletRatingDto>> {
+    async toiletsControllerGetAllRatings(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ToiletRatingResDto>> {
         const response = await this.toiletsControllerGetAllRatingsRaw(initOverrides);
         return await response.value();
     }
@@ -202,17 +217,17 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * Получить все туалеты с отзывами
      */
-    async toiletsControllerGetAllToiletsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<CreateToiletRatingDto>>> {
+    async toiletsControllerGetAllToiletsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ToiletResDto>>> {
         const requestOptions = await this.toiletsControllerGetAllToiletsRequestOpts();
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(CreateToiletRatingDtoFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ToiletResDtoFromJSON));
     }
 
     /**
      * Получить все туалеты с отзывами
      */
-    async toiletsControllerGetAllToilets(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CreateToiletRatingDto>> {
+    async toiletsControllerGetAllToilets(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ToiletResDto>> {
         const response = await this.toiletsControllerGetAllToiletsRaw(initOverrides);
         return await response.value();
     }
@@ -247,17 +262,17 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * Получить все отзывы конкретного туалета
      */
-    async toiletsControllerGetRatingsByToiletRaw(requestParameters: ToiletsControllerGetRatingsByToiletRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<CreateToiletRatingDto>>> {
+    async toiletsControllerGetRatingsByToiletRaw(requestParameters: ToiletsControllerGetRatingsByToiletRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ToiletRatingResDto>>> {
         const requestOptions = await this.toiletsControllerGetRatingsByToiletRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(CreateToiletRatingDtoFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ToiletRatingResDtoFromJSON));
     }
 
     /**
      * Получить все отзывы конкретного туалета
      */
-    async toiletsControllerGetRatingsByToilet(requestParameters: ToiletsControllerGetRatingsByToiletRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<CreateToiletRatingDto>> {
+    async toiletsControllerGetRatingsByToilet(requestParameters: ToiletsControllerGetRatingsByToiletRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ToiletRatingResDto>> {
         const response = await this.toiletsControllerGetRatingsByToiletRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -292,17 +307,17 @@ export class DefaultApi extends runtime.BaseAPI {
     /**
      * Получить туалет по ID с его отзывами
      */
-    async toiletsControllerGetToiletByIdRaw(requestParameters: ToiletsControllerGetToiletByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateToiletRatingDto>> {
+    async toiletsControllerGetToiletByIdRaw(requestParameters: ToiletsControllerGetToiletByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ToiletResDto>> {
         const requestOptions = await this.toiletsControllerGetToiletByIdRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CreateToiletRatingDtoFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ToiletResDtoFromJSON(jsonValue));
     }
 
     /**
      * Получить туалет по ID с его отзывами
      */
-    async toiletsControllerGetToiletById(requestParameters: ToiletsControllerGetToiletByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateToiletRatingDto> {
+    async toiletsControllerGetToiletById(requestParameters: ToiletsControllerGetToiletByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ToiletResDto> {
         const response = await this.toiletsControllerGetToiletByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }

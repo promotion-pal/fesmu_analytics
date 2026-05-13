@@ -15,7 +15,7 @@ All URIs are relative to *http://localhost*
 
 ## toiletsControllerAddRating
 
-> CreateToiletRatingDto toiletsControllerAddRating(id, createToiletRatingDto)
+> ToiletRatingResDto toiletsControllerAddRating(id, toiletCreateRatingDto)
 
 Добавить отзыв к туалету
 
@@ -35,8 +35,8 @@ async function example() {
   const body = {
     // number
     id: 8.14,
-    // CreateToiletRatingDto
-    createToiletRatingDto: ...,
+    // ToiletCreateRatingDto
+    toiletCreateRatingDto: ...,
   } satisfies ToiletsControllerAddRatingRequest;
 
   try {
@@ -57,11 +57,11 @@ example().catch(console.error);
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **id** | `number` |  | [Defaults to `undefined`] |
-| **createToiletRatingDto** | [CreateToiletRatingDto](CreateToiletRatingDto.md) |  | |
+| **toiletCreateRatingDto** | [ToiletCreateRatingDto](ToiletCreateRatingDto.md) |  | |
 
 ### Return type
 
-[**CreateToiletRatingDto**](CreateToiletRatingDto.md)
+[**ToiletRatingResDto**](ToiletRatingResDto.md)
 
 ### Authorization
 
@@ -83,7 +83,7 @@ No authorization required
 
 ## toiletsControllerCreateToilet
 
-> CreateToiletRatingDto toiletsControllerCreateToilet(createToiletRatingDto)
+> ToiletResDto toiletsControllerCreateToilet(toiletCreateDto)
 
 Создать новый туалет
 
@@ -101,8 +101,8 @@ async function example() {
   const api = new DefaultApi();
 
   const body = {
-    // CreateToiletRatingDto
-    createToiletRatingDto: ...,
+    // ToiletCreateDto
+    toiletCreateDto: ...,
   } satisfies ToiletsControllerCreateToiletRequest;
 
   try {
@@ -122,11 +122,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **createToiletRatingDto** | [CreateToiletRatingDto](CreateToiletRatingDto.md) |  | |
+| **toiletCreateDto** | [ToiletCreateDto](ToiletCreateDto.md) |  | |
 
 ### Return type
 
-[**CreateToiletRatingDto**](CreateToiletRatingDto.md)
+[**ToiletResDto**](ToiletResDto.md)
 
 ### Authorization
 
@@ -148,7 +148,7 @@ No authorization required
 
 ## toiletsControllerGetAllRatings
 
-> Array&lt;CreateToiletRatingDto&gt; toiletsControllerGetAllRatings()
+> Array&lt;ToiletRatingResDto&gt; toiletsControllerGetAllRatings()
 
 Получить все отзывы
 
@@ -183,7 +183,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**Array&lt;CreateToiletRatingDto&gt;**](CreateToiletRatingDto.md)
+[**Array&lt;ToiletRatingResDto&gt;**](ToiletRatingResDto.md)
 
 ### Authorization
 
@@ -205,7 +205,7 @@ No authorization required
 
 ## toiletsControllerGetAllToilets
 
-> Array&lt;CreateToiletRatingDto&gt; toiletsControllerGetAllToilets()
+> Array&lt;ToiletResDto&gt; toiletsControllerGetAllToilets()
 
 Получить все туалеты с отзывами
 
@@ -240,7 +240,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**Array&lt;CreateToiletRatingDto&gt;**](CreateToiletRatingDto.md)
+[**Array&lt;ToiletResDto&gt;**](ToiletResDto.md)
 
 ### Authorization
 
@@ -262,7 +262,7 @@ No authorization required
 
 ## toiletsControllerGetRatingsByToilet
 
-> Array&lt;CreateToiletRatingDto&gt; toiletsControllerGetRatingsByToilet(id)
+> Array&lt;ToiletRatingResDto&gt; toiletsControllerGetRatingsByToilet(id)
 
 Получить все отзывы конкретного туалета
 
@@ -305,7 +305,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**Array&lt;CreateToiletRatingDto&gt;**](CreateToiletRatingDto.md)
+[**Array&lt;ToiletRatingResDto&gt;**](ToiletRatingResDto.md)
 
 ### Authorization
 
@@ -327,7 +327,7 @@ No authorization required
 
 ## toiletsControllerGetToiletById
 
-> CreateToiletRatingDto toiletsControllerGetToiletById(id)
+> ToiletResDto toiletsControllerGetToiletById(id)
 
 Получить туалет по ID с его отзывами
 
@@ -370,7 +370,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**CreateToiletRatingDto**](CreateToiletRatingDto.md)
+[**ToiletResDto**](ToiletResDto.md)
 
 ### Authorization
 

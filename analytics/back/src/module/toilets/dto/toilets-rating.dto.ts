@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsInt, Min, Max, IsBoolean } from 'class-validator';
 
-export class CreateToiletRatingDto {
+export class ToiletCreateRatingDto {
   @ApiProperty({
     example: 4,
     description: 'Оценка запаха от 1 до 5',
@@ -51,4 +51,24 @@ export class CreateToiletRatingDto {
   })
   @IsString()
   comment: string;
+}
+
+export class ToiletRatingResDto extends ToiletCreateRatingDto {
+  @ApiProperty({
+    example: 1,
+    description: 'Уникальный идентификатор оценки',
+  })
+  id: number;
+
+  @ApiProperty({
+    example: '2024-01-15T10:30:00Z',
+    description: 'Дата создания записи',
+  })
+  createdAt: Date;
+
+  @ApiProperty({
+    example: '2024-01-15T12:45:00Z',
+    description: 'Дата последнего обновления',
+  })
+  updatedAt: Date;
 }

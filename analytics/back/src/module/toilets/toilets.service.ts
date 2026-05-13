@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ToiletEntity, ToiletRatingEntity } from './entity/toilets.entity';
 import { Repository } from 'typeorm';
-import { CreateToiletRatingDto } from './dto/toilets-rating.dto';
+import { ToiletCreateRatingDto } from './dto/toilets-rating.dto';
+import { ToiletCreateDto } from './dto/toilets.dto';
 
 @Injectable()
 export class ToiletsService {
@@ -48,12 +49,12 @@ export class ToiletsService {
     });
   }
 
-  async createToilet(dto: any) {
+  async createToilet(dto: ToiletCreateDto) {
     const newToilet = this.toiletRepository.create(dto);
     return await this.toiletRepository.save(newToilet);
   }
 
-  async addRating(toiletId: number, createRatingDto: CreateToiletRatingDto) {
+  async addRating(toiletId: number, createRatingDto: ToiletCreateRatingDto) {
     const toilet = await this.toiletRepository.findOne({
       where: { id: toiletId },
     });
@@ -70,30 +71,3 @@ export class ToiletsService {
     return await this.ratingRepository.save(newRating);
   }
 }
-
-// import { Injectable } from '@nestjs/common';
-// import { InjectRepository } from '@nestjs/typeorm';
-// import { ToiletEntity } from './entity/toilets.entity';
-// import { Repository } from 'typeorm';
-// import { Entity } from 'src/core/types';
-
-// @Injectable()
-// export class ToiletsService {
-//   constructor(
-//     @InjectRepository(ToiletEntity)
-//     private readonly toiletEntity: Repository<ToiletEntity>,
-//   ) {}
-
-//   async fetch() {
-//     return await this.toiletEntity.find();
-//   }
-
-//   async create(dto: any) {
-//     const newToilet: Entity<ToiletEntity> = {
-//       ...dto,
-//     };
-
-//     const dbToilets = this.toiletEntity.create(newToilet);
-//     return await this.toiletEntity.save(dbToilets);
-//   }
-// }

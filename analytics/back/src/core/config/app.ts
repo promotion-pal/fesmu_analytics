@@ -1,4 +1,3 @@
 export const appConfig = {
-  name: 'Jelly',
-  fullName: '',
+  name: 'ДВГМУ Аналитика',
 };

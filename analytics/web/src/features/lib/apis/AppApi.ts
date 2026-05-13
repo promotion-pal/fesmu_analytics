@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Jelly
+ * ДВГМУ Аналитика
  * API документация
  *
  * The version of the OpenAPI document: 1.0
