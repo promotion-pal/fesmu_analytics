@@ -207,20 +207,6 @@ export function AnalyticPage() {
                 </div>
               )}
             </div>
-            <button
-              onClick={() => {
-                setIsSubmitted(false);
-                setCurrentStep(0);
-                setSmellRating(3);
-                setPurityRating(3);
-                setHasToiletPaper(true);
-                setHasSoap(true);
-                setComment("");
-              }}
-              className="bg-accent text-white px-4 py-2 rounded-lg cursor-pointer transition hover:opacity-80"
-            >
-              Оценить еще раз
-            </button>
           </div>
         </div>
       </div>
