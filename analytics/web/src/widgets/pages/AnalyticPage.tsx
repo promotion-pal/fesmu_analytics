@@ -137,7 +137,7 @@ export function AnalyticPage() {
     try {
       const res = await api.toiletsControllerAddRating({
         id: parseInt(id),
-        createToiletRatingDto: {
+        toiletCreateRatingDto: {
           hasSoap,
           comment,
           smellRating,
