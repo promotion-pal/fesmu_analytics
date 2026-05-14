@@ -37,6 +37,7 @@ export class ToiletEntity {
     name: 'person',
     enum: TOILET_PERSON,
     nullable: false,
+    default: TOILET_PERSON.MAN,
   })
   person: TOILET_PERSON;
 
