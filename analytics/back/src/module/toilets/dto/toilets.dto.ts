@@ -1,16 +1,57 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsArray, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import {
+  IsArray,
+  IsNumber,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+import { TOILET_LOCATION, TOILET_PERSON } from '../enum/toilets.enum';
 import { ToiletCreateRatingDto } from './toilets-rating.dto';
 
 export class ToiletCreateDto {
   @ApiProperty({
     example: 'Туалет в ТЦ "Европа"',
     description: 'Название или местоположение туалета',
-    required: true,
+    required: false,
   })
   @IsString()
+  @IsOptional()
   name: string;
+
+  @ApiProperty({
+    enum: TOILET_LOCATION,
+    example: TOILET_LOCATION.FIRST_BUILDING,
+    description: 'Местоположение туалета',
+    required: true,
+  })
+  location: TOILET_LOCATION;
+
+  @ApiProperty({
+    enum: TOILET_PERSON,
+    example: TOILET_PERSON.MAN,
+    description: 'Гендер',
+    required: true,
+  })
+  person: TOILET_PERSON;
+
+  @ApiProperty({
+    example: 1,
+    required: true,
+    type: Number,
+  })
+  @IsNumber()
+  @Type(() => Number)
+  floor: number;
+}
+
+export class ToiletResDto extends ToiletCreateDto {
+  @ApiProperty({
+    example: 1,
+    description: 'Уникальный идентификатор туалета',
+  })
+  id: number;
 
   @ApiProperty({
     type: [ToiletCreateRatingDto],
@@ -21,14 +62,6 @@ export class ToiletCreateDto {
   @ValidateNested({ each: true })
   @Type(() => ToiletCreateRatingDto)
   ratings: ToiletCreateRatingDto[];
-}
-
-export class ToiletResDto extends ToiletCreateDto {
-  @ApiProperty({
-    example: 1,
-    description: 'Уникальный идентификатор туалета',
-  })
-  id: number;
 
   @ApiProperty({
     example: '2024-01-15T10:30:00Z',

@@ -7,7 +7,9 @@
 Name | Type
 ------------ | -------------
 `name` | string
-`ratings` | [Array&lt;ToiletCreateRatingDto&gt;](ToiletCreateRatingDto.md)
+`location` | string
+`person` | string
+`floor` | number
 
 ## Example
 
@@ -17,7 +19,9 @@ import type { ToiletCreateDto } from ''
 // TODO: Update the object below with actual values
 const example = {
   "name": Туалет в ТЦ "Европа",
-  "ratings": null,
+  "location": first_building,
+  "person": man,
+  "floor": 1,
 } satisfies ToiletCreateDto
 
 console.log(example)

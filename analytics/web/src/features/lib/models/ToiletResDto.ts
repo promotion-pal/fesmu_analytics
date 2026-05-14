@@ -32,19 +32,37 @@ export interface ToiletResDto {
      * @type {string}
      * @memberof ToiletResDto
      */
-    name: string;
+    name?: string;
+    /**
+     * Местоположение туалета
+     * @type {ToiletResDtoLocationEnum}
+     * @memberof ToiletResDto
+     */
+    location: ToiletResDtoLocationEnum;
+    /**
+     * Гендер
+     * @type {ToiletResDtoPersonEnum}
+     * @memberof ToiletResDto
+     */
+    person: ToiletResDtoPersonEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof ToiletResDto
+     */
+    floor: number;
+    /**
+     * Уникальный идентификатор туалета
+     * @type {number}
+     * @memberof ToiletResDto
+     */
+    id: number;
     /**
      * Список оценок туалета
      * @type {Array<ToiletCreateRatingDto>}
      * @memberof ToiletResDto
      */
     ratings: Array<ToiletCreateRatingDto>;
-    /**
-     * Уникальный идентификатор туалета
-     * @type {number}
-     * @memberof ToiletResDto
-     */
-    id: number;
     /**
      * Дата создания записи
      * @type {Date}
@@ -59,13 +77,37 @@ export interface ToiletResDto {
     updatedAt: Date;
 }
 
+
+/**
+ * @export
+ */
+export const ToiletResDtoLocationEnum = {
+    FirstBuilding: 'first_building',
+    ThirdBuilding: 'third_building',
+    SecondBuilding: 'second_building'
+} as const;
+export type ToiletResDtoLocationEnum = typeof ToiletResDtoLocationEnum[keyof typeof ToiletResDtoLocationEnum];
+
+/**
+ * @export
+ */
+export const ToiletResDtoPersonEnum = {
+    Man: 'man',
+    Woman: 'woman',
+    Universal: 'universal'
+} as const;
+export type ToiletResDtoPersonEnum = typeof ToiletResDtoPersonEnum[keyof typeof ToiletResDtoPersonEnum];
+
+
 /**
  * Check if a given object implements the ToiletResDto interface.
  */
 export function instanceOfToiletResDto(value: object): value is ToiletResDto {
-    if (!('name' in value) || value['name'] === undefined) return false;
-    if (!('ratings' in value) || value['ratings'] === undefined) return false;
+    if (!('location' in value) || value['location'] === undefined) return false;
+    if (!('person' in value) || value['person'] === undefined) return false;
+    if (!('floor' in value) || value['floor'] === undefined) return false;
     if (!('id' in value) || value['id'] === undefined) return false;
+    if (!('ratings' in value) || value['ratings'] === undefined) return false;
     if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
     if (!('updatedAt' in value) || value['updatedAt'] === undefined) return false;
     return true;
@@ -81,9 +123,12 @@ export function ToiletResDtoFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'name': json['name'],
-        'ratings': ((json['ratings'] as Array<any>).map(ToiletCreateRatingDtoFromJSON)),
+        'name': json['name'] == null ? undefined : json['name'],
+        'location': json['location'],
+        'person': json['person'],
+        'floor': json['floor'],
         'id': json['id'],
+        'ratings': ((json['ratings'] as Array<any>).map(ToiletCreateRatingDtoFromJSON)),
         'createdAt': (new Date(json['createdAt'])),
         'updatedAt': (new Date(json['updatedAt'])),
     };
@@ -101,8 +146,11 @@ export function ToiletResDtoToJSONTyped(value?: ToiletResDto | null, ignoreDiscr
     return {
         
         'name': value['name'],
-        'ratings': ((value['ratings'] as Array<any>).map(ToiletCreateRatingDtoToJSON)),
+        'location': value['location'],
+        'person': value['person'],
+        'floor': value['floor'],
         'id': value['id'],
+        'ratings': ((value['ratings'] as Array<any>).map(ToiletCreateRatingDtoToJSON)),
         'createdAt': value['createdAt'].toISOString(),
         'updatedAt': value['updatedAt'].toISOString(),
     };

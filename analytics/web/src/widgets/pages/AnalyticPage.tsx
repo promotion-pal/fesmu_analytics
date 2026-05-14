@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { ToiletIcon } from "lucide-react";
-import { DefaultApi } from "../../features/lib";
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { apiConfig } from "../../config/api";
+import { DefaultApi } from "../../features/lib";
 
 export function AnalyticPage() {
   const [searchParams] = useSearchParams();
@@ -175,10 +175,13 @@ export function AnalyticPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center max-w-md">
           <div className="text-6xl mb-4">✅</div>
+
           <h2 className="text-accent mb-2">Спасибо за оценку!</h2>
+
           <p className="text-text mb-4">
             Ваша оценка туалета №{id} успешно отправлена
           </p>
+
           <div className="space-y-3">
             <div className="bg-accent-bg rounded-lg p-4 text-left text-sm space-y-2">
               <div className="flex justify-between">

@@ -13,14 +13,6 @@
  */
 
 import { mapValues } from '../runtime';
-import type { ToiletCreateRatingDto } from './ToiletCreateRatingDto';
-import {
-    ToiletCreateRatingDtoFromJSON,
-    ToiletCreateRatingDtoFromJSONTyped,
-    ToiletCreateRatingDtoToJSON,
-    ToiletCreateRatingDtoToJSONTyped,
-} from './ToiletCreateRatingDto';
-
 /**
  * 
  * @export
@@ -32,21 +24,56 @@ export interface ToiletCreateDto {
      * @type {string}
      * @memberof ToiletCreateDto
      */
-    name: string;
+    name?: string;
     /**
-     * Список оценок туалета
-     * @type {Array<ToiletCreateRatingDto>}
+     * Местоположение туалета
+     * @type {ToiletCreateDtoLocationEnum}
      * @memberof ToiletCreateDto
      */
-    ratings: Array<ToiletCreateRatingDto>;
+    location: ToiletCreateDtoLocationEnum;
+    /**
+     * Гендер
+     * @type {ToiletCreateDtoPersonEnum}
+     * @memberof ToiletCreateDto
+     */
+    person: ToiletCreateDtoPersonEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof ToiletCreateDto
+     */
+    floor: number;
 }
+
+
+/**
+ * @export
+ */
+export const ToiletCreateDtoLocationEnum = {
+    FirstBuilding: 'first_building',
+    ThirdBuilding: 'third_building',
+    SecondBuilding: 'second_building'
+} as const;
+export type ToiletCreateDtoLocationEnum = typeof ToiletCreateDtoLocationEnum[keyof typeof ToiletCreateDtoLocationEnum];
+
+/**
+ * @export
+ */
+export const ToiletCreateDtoPersonEnum = {
+    Man: 'man',
+    Woman: 'woman',
+    Universal: 'universal'
+} as const;
+export type ToiletCreateDtoPersonEnum = typeof ToiletCreateDtoPersonEnum[keyof typeof ToiletCreateDtoPersonEnum];
+
 
 /**
  * Check if a given object implements the ToiletCreateDto interface.
  */
 export function instanceOfToiletCreateDto(value: object): value is ToiletCreateDto {
-    if (!('name' in value) || value['name'] === undefined) return false;
-    if (!('ratings' in value) || value['ratings'] === undefined) return false;
+    if (!('location' in value) || value['location'] === undefined) return false;
+    if (!('person' in value) || value['person'] === undefined) return false;
+    if (!('floor' in value) || value['floor'] === undefined) return false;
     return true;
 }
 
@@ -60,8 +87,10 @@ export function ToiletCreateDtoFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'name': json['name'],
-        'ratings': ((json['ratings'] as Array<any>).map(ToiletCreateRatingDtoFromJSON)),
+        'name': json['name'] == null ? undefined : json['name'],
+        'location': json['location'],
+        'person': json['person'],
+        'floor': json['floor'],
     };
 }
 
@@ -77,7 +106,9 @@ export function ToiletCreateDtoToJSONTyped(value?: ToiletCreateDto | null, ignor
     return {
         
         'name': value['name'],
-        'ratings': ((value['ratings'] as Array<any>).map(ToiletCreateRatingDtoToJSON)),
+        'location': value['location'],
+        'person': value['person'],
+        'floor': value['floor'],
     };
 }
 

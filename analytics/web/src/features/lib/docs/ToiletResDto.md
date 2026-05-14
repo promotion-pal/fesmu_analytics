@@ -7,8 +7,11 @@
 Name | Type
 ------------ | -------------
 `name` | string
-`ratings` | [Array&lt;ToiletCreateRatingDto&gt;](ToiletCreateRatingDto.md)
+`location` | string
+`person` | string
+`floor` | number
 `id` | number
+`ratings` | [Array&lt;ToiletCreateRatingDto&gt;](ToiletCreateRatingDto.md)
 `createdAt` | Date
 `updatedAt` | Date
 
@@ -20,8 +23,11 @@ import type { ToiletResDto } from ''
 // TODO: Update the object below with actual values
 const example = {
   "name": Туалет в ТЦ "Европа",
-  "ratings": null,
+  "location": first_building,
+  "person": man,
+  "floor": 1,
   "id": 1,
+  "ratings": null,
   "createdAt": 2024-01-15T10:30Z,
   "updatedAt": 2024-01-15T12:45Z,
 } satisfies ToiletResDto

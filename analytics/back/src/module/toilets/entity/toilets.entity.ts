@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   Entity,
@@ -5,7 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
+import { TOILET_LOCATION, TOILET_PERSON } from '../enum/toilets.enum';
 
 @Entity({ name: 'toilets' })
 export class ToiletEntity {
@@ -25,6 +26,44 @@ export class ToiletEntity {
     name: 'name',
   })
   name: string;
+
+  @ApiProperty({
+    example: TOILET_PERSON.MAN,
+    description: 'Гендер',
+    required: true,
+  })
+  @Column({
+    type: 'enum',
+    name: 'person',
+    enum: TOILET_PERSON,
+    nullable: false,
+  })
+  person: TOILET_PERSON;
+
+  @ApiProperty({
+    enum: TOILET_LOCATION,
+    example: TOILET_LOCATION.FIRST_BUILDING,
+    description: 'Местоположение туалета',
+    required: true,
+  })
+  @Column({
+    type: 'enum',
+    enum: TOILET_LOCATION,
+    name: 'location',
+    nullable: false,
+    default: TOILET_LOCATION.FIRST_BUILDING,
+  })
+  location: TOILET_LOCATION;
+
+  @ApiProperty({
+    example: '1',
+    required: true,
+  })
+  @Column({
+    default: 1,
+    nullable: false,
+  })
+  floor: number;
 
   @ApiProperty({
     example: '2024-01-15T10:30:00Z',

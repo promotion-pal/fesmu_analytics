@@ -1,2 +1,3 @@
 export { AnalyticPage } from "./AnalyticPage";
-export { HomePage } from "./HomePage";
+export { NotFoundPage } from "./NotFoundPage";
+export { DashboardPage } from "./DashboardPage";
