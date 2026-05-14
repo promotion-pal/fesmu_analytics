@@ -318,7 +318,7 @@ export function DashboardPage() {
     };
 
     fetchData();
-  }, [api, filterRatingsByDate]);
+  }, [filterRatingsByDate]);
 
   // Форматирование периода для отображения
   const getPeriodText = () => {
