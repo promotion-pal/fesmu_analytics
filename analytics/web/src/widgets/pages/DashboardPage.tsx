@@ -3,63 +3,6 @@ import { motion, AnimatePresence } from "motion/react";
 import { DefaultApi, ToiletResDto } from "../../features/lib";
 import { apiConfig } from "../../config/api";
 
-// function InfoTooltip({
-//   title,
-//   description,
-//   formula,
-//   position = "bottom-right",
-// }: {
-//   title: string;
-//   description: string;
-//   formula?: string;
-//   position?: "top-right" | "top-left" | "bottom-right" | "bottom-left";
-// }) {
-//   const [isVisible, setIsVisible] = useState(false);
-
-//   const positionClasses = {
-//     "top-right": "right-0 bottom-full mb-2",
-//     "top-left": "left-0 bottom-full mb-2",
-//     "bottom-right": "right-0 top-full mt-2",
-//     "bottom-left": "left-0 top-full mt-2",
-//   };
-
-//   return (
-//     <div className="relative inline-block">
-//       <button
-//         onMouseEnter={() => setIsVisible(true)}
-//         onMouseLeave={() => setIsVisible(false)}
-//         className="ml-2 w-5 h-5 rounded-full bg-accent/20 text-accent text-xs font-bold flex items-center justify-center cursor-help hover:bg-accent/30 transition-colors"
-//       >
-//         ?
-//       </button>
-
-//       <AnimatePresence>
-//         {isVisible && (
-//           <motion.div
-//             initial={{ opacity: 0, scale: 0.95, y: -10 }}
-//             animate={{ opacity: 1, scale: 1, y: 0 }}
-//             exit={{ opacity: 0, scale: 0.95, y: -10 }}
-//             className={`absolute z-50 w-80 p-4 bg-bg border border-border rounded-lg shadow-theme ${positionClasses[position]}`}
-//           >
-//             <h4 className="font-semibold text-text-h mb-2">{title}</h4>
-//             <p className="text-sm text-text mb-2">{description}</p>
-//             {formula && (
-//               <div className="mt-2 pt-2 border-t border-border">
-//                 <span className="text-xs font-medium text-accent">
-//                   Формула:
-//                 </span>
-//                 <code className="block text-xs mt-1 p-2 bg-code-bg rounded">
-//                   {formula}
-//                 </code>
-//               </div>
-//             )}
-//           </motion.div>
-//         )}
-//       </AnimatePresence>
-//     </div>
-//   );
-// }
-
 function InfoTooltip({
   title,
   description,
