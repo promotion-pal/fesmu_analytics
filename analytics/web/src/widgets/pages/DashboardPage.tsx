@@ -411,11 +411,10 @@ export function DashboardPage() {
     }
   }, [api, filterRatingsByDate]);
 
-  // Загрузка данных при монтировании и изменении фильтра
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchData();
-  }, [fetchData]); // Используем fetchData как зависимость
+  }, []);
 
   if (loading) {
     return (
