@@ -15,6 +15,55 @@ function InfoTooltip({
   position?: "top-right" | "top-left" | "bottom-right" | "bottom-left";
 }) {
   const [isVisible, setIsVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  // Определяем мобильное устройство
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Закрытие при скролле на мобилках
+  useEffect(() => {
+    if (!isVisible || !isMobile) return;
+
+    const handleScroll = () => {
+      setIsVisible(false);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    document.body.style.overflow = 'hidden'; // Блокируем скролл фона
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.body.style.overflow = '';
+    };
+  }, [isVisible, isMobile]);
+
+  // Закрытие при клике вне тултипа
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        tooltipRef.current &&
+        !tooltipRef.current.contains(event.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
+        setIsVisible(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isVisible]);
 
   const positionClasses = {
     "top-right": "right-0 bottom-full mb-2",
@@ -23,9 +72,80 @@ function InfoTooltip({
     "bottom-left": "left-0 top-full mt-2",
   };
 
+  // Мобильное отображение - центральный модал
+  if (isMobile) {
+    return (
+      <>
+        <button
+          ref={buttonRef}
+          onClick={() => setIsVisible(true)}
+          className="ml-2 w-5 h-5 rounded-full bg-accent/20 text-accent text-xs font-bold flex items-center justify-center cursor-help hover:bg-accent/30 transition-colors shrink-0"
+        >
+          ?
+        </button>
+
+        <AnimatePresence>
+          {isVisible && (
+            <>
+              {/* Затемнение фона */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black/50 z-40"
+                onClick={() => setIsVisible(false)}
+              />
+              
+              {/* Центральный модал */}
+              <motion.div
+                ref={tooltipRef}
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                transition={{ duration: 0.2 }}
+                className="fixed left-4 right-4 top-1/2 -translate-y-1/2 z-50 max-h-[80vh] overflow-y-auto"
+              >
+                <div className="bg-bg border border-border rounded-lg shadow-theme p-5 mx-auto max-w-sm">
+                  <div className="flex justify-between items-start mb-3">
+                    <h4 className="font-semibold text-text-h text-lg pr-4">
+                      {title}
+                    </h4>
+                    <button
+                      onClick={() => setIsVisible(false)}
+                      className="text-text hover:text-accent transition-colors text-xl leading-none"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  
+                  <p className="text-sm text-text mb-3 leading-relaxed">
+                    {description}
+                  </p>
+                  
+                  {formula && (
+                    <div className="mt-3 pt-3 border-t border-border">
+                      <span className="text-xs font-medium text-accent block mb-2">
+                        Формула расчета:
+                      </span>
+                      <code className="block text-xs p-3 bg-code-bg rounded break-words font-mono">
+                        {formula}
+                      </code>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+      </>
+    );
+  }
+
+  // Десктопное отображение - тултип при наведении
   return (
     <div className="relative inline-block">
       <button
+        ref={buttonRef}
         onMouseEnter={() => setIsVisible(true)}
         onMouseLeave={() => setIsVisible(false)}
         className="ml-2 w-5 h-5 rounded-full bg-accent/20 text-accent text-xs font-bold flex items-center justify-center cursor-help hover:bg-accent/30 transition-colors shrink-0"
@@ -35,68 +155,59 @@ function InfoTooltip({
 
       <AnimatePresence>
         {isVisible && (
-          <>
+          <motion.div
+            ref={tooltipRef}
+            initial={{ opacity: 0, scale: 0.95, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -10 }}
+            transition={{ duration: 0.15 }}
+            className={`absolute z-50 w-80 p-4 bg-bg border border-border rounded-lg shadow-theme ${positionClasses[position]}`}
+            onMouseEnter={() => setIsVisible(true)}
+            onMouseLeave={() => setIsVisible(false)}
+          >
+            <h4 className="font-semibold text-text-h mb-2 pr-4">{title}</h4>
+            <p className="text-sm text-text mb-2">{description}</p>
+            {formula && (
+              <div className="mt-2 pt-2 border-t border-border">
+                <span className="text-xs font-medium text-accent">
+                  Формула:
+                </span>
+                <code className="block text-xs mt-1 p-2 bg-code-bg rounded break-words">
+                  {formula}
+                </code>
+              </div>
+            )}
+            {/* Стрелка */}
             <div
-              className="fixed inset-0 z-40"
-              style={{ pointerEvents: "none" }}
-              onClick={() => setIsVisible(false)}
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: -10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: -10 }}
-              transition={{ duration: 0.15 }}
-              className={`fixed z-50 w-80 p-4 bg-bg border border-border rounded-lg shadow-theme ${positionClasses[position]}`}
+              className="absolute w-2 h-2 bg-bg border border-border transform rotate-45"
               style={{
-                position: "fixed",
-                pointerEvents: "auto",
+                ...(position === "top-right" && {
+                  bottom: "-5px",
+                  right: "10px",
+                  borderTop: "none",
+                  borderLeft: "none",
+                }),
+                ...(position === "top-left" && {
+                  bottom: "-5px",
+                  left: "10px",
+                  borderTop: "none",
+                  borderRight: "none",
+                }),
+                ...(position === "bottom-right" && {
+                  top: "-5px",
+                  right: "10px",
+                  borderBottom: "none",
+                  borderLeft: "none",
+                }),
+                ...(position === "bottom-left" && {
+                  top: "-5px",
+                  left: "10px",
+                  borderBottom: "none",
+                  borderRight: "none",
+                }),
               }}
-              onMouseEnter={() => setIsVisible(true)}
-              onMouseLeave={() => setIsVisible(false)}
-            >
-              <h4 className="font-semibold text-text-h mb-2 pr-4">{title}</h4>
-              <p className="text-sm text-text mb-2">{description}</p>
-              {formula && (
-                <div className="mt-2 pt-2 border-t border-border">
-                  <span className="text-xs font-medium text-accent">
-                    Формула:
-                  </span>
-                  <code className="block text-xs mt-1 p-2 bg-code-bg rounded break-words">
-                    {formula}
-                  </code>
-                </div>
-              )}
-              <div
-                className="absolute w-2 h-2 bg-bg border border-border transform rotate-45"
-                style={{
-                  ...(position === "top-right" && {
-                    bottom: "-5px",
-                    right: "10px",
-                    borderTop: "none",
-                    borderLeft: "none",
-                  }),
-                  ...(position === "top-left" && {
-                    bottom: "-5px",
-                    left: "10px",
-                    borderTop: "none",
-                    borderRight: "none",
-                  }),
-                  ...(position === "bottom-right" && {
-                    top: "-5px",
-                    right: "10px",
-                    borderBottom: "none",
-                    borderLeft: "none",
-                  }),
-                  ...(position === "bottom-left" && {
-                    top: "-5px",
-                    left: "10px",
-                    borderBottom: "none",
-                    borderRight: "none",
-                  }),
-                }}
-              />
-            </motion.div>
-          </>
+            />
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
