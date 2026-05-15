@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import { CommonInfoTooltip } from "../../shared/ui/info";
 import { useAnalytic } from "../analytic";
@@ -44,7 +44,6 @@ function ErrorMessage({
   );
 }
 
-// Компонент карточки метрики
 function MetricCard({
   gradient,
   label,
@@ -94,7 +93,11 @@ export function DashboardPage() {
   const worstRatedRef = useRef<HTMLDivElement>(null);
   const fullListRef = useRef<HTMLDivElement>(null);
 
-  const { toilets, loading, error, stats, refetch } = useAnalytic();
+  const { toilets, loading, error, stats, refetch, fetch } = useAnalytic();
+
+  useEffect(() => {
+    fetch();
+  }, []);
 
   if (loading) {
     return <LoadingSpinner />;

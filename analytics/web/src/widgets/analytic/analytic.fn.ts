@@ -21,6 +21,7 @@ interface UseAnalytic {
     paperAvailabilityPercent: number;
     soapAvailabilityPercent: number;
   };
+  fetch: () => Promise<void>;
   refetch: () => Promise<void>;
 }
 
@@ -142,6 +143,7 @@ export function useAnalytic(): UseAnalytic {
     loading,
     error,
     stats,
+    fetch: fetchData,
     refetch: fetchData,
   };
 }
