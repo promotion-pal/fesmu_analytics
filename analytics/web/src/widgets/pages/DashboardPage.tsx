@@ -17,7 +17,9 @@ export function DashboardPage() {
   const worstRatedRef = useRef<HTMLDivElement>(null);
   const fullListRef = useRef<HTMLDivElement>(null);
 
-  const [selectedToilet, setSelectedToilet] = useState<ToiletResDto | null>(null);
+  const [selectedToilet, setSelectedToilet] = useState<ToiletResDto | null>(
+    null,
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
@@ -271,7 +273,9 @@ export function DashboardPage() {
             <div className="text-center">
               <button
                 onClick={() => {
-                  const activeToilet = toilets.find(t => t.id === stats.mostActiveToilet.id);
+                  const activeToilet = toilets.find(
+                    (t) => t.id === stats.mostActiveToilet.id,
+                  );
                   if (activeToilet) handleOpenModal(activeToilet);
                 }}
                 className="text-2xl font-bold text-accent mb-2 hover:underline"
@@ -291,9 +295,7 @@ export function DashboardPage() {
           animate="visible"
           className="grid grid-cols-[repeat(auto-fit,minmax(350px,1fr))] gap-6 mb-8"
         >
-          <motion.div
-            className="bg-bg rounded-lg shadow-theme border border-border overflow-hidden"
-          >
+          <motion.div className="bg-bg rounded-lg shadow-theme border border-border overflow-hidden">
             <div className="px-6 py-4 border-b border-border bg-gradient-to-r from-yellow-500/10 to-transparent">
               <div className="flex items-center">
                 <h2 className="flex items-center">
@@ -446,14 +448,18 @@ export function DashboardPage() {
               toilets.map((toilet, index) => {
                 const avgSmell = toilet.ratings?.length
                   ? (
-                      toilet.ratings.reduce((sum, r) => sum + r.smellRating, 0) /
-                      toilet.ratings.length
+                      toilet.ratings.reduce(
+                        (sum, r) => sum + r.smellRating,
+                        0,
+                      ) / toilet.ratings.length
                     ).toFixed(1)
                   : "Нет оценок";
                 const avgPurity = toilet.ratings?.length
                   ? (
-                      toilet.ratings.reduce((sum, r) => sum + r.purityRating, 0) /
-                      toilet.ratings.length
+                      toilet.ratings.reduce(
+                        (sum, r) => sum + r.purityRating,
+                        0,
+                      ) / toilet.ratings.length
                     ).toFixed(1)
                   : "Нет оценок";
 
@@ -474,7 +480,9 @@ export function DashboardPage() {
                         </h3>
                         <p className="text-sm text-text mt-1">
                           Добавлен:{" "}
-                          {new Date(toilet.createdAt).toLocaleDateString("ru-RU")}
+                          {new Date(toilet.createdAt).toLocaleDateString(
+                            "ru-RU",
+                          )}
                         </p>
                       </div>
                       <div className="text-sm bg-accent-bg text-accent px-3 py-1 rounded-full border border-accent-border">
@@ -512,24 +520,38 @@ export function DashboardPage() {
                               / {toilet.ratings.length}
                             </div>
                             <div>
-                              🧼 {toilet.ratings.filter((r) => r.hasSoap).length}{" "}
-                              / {toilet.ratings.length}
+                              🧼{" "}
+                              {toilet.ratings.filter((r) => r.hasSoap).length} /{" "}
+                              {toilet.ratings.length}
                             </div>
                           </div>
                         </div>
                       </div>
                     )}
-                    
-                    {/* Кнопка "Подробнее" */}
+
                     <div className="mt-4 flex justify-end">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           handleOpenModal(toilet);
                         }}
-                        className="text-sm text-accent hover:underline flex items-center gap-1"
+                        className="px-4 py-2 bg-gradient-to-r from-accent to-accent/80 text-white rounded-lg hover:from-accent/90 hover:to-accent/70 transition-all flex items-center gap-2 text-sm font-semibold shadow-md"
                       >
-                        Подробная статистика →
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                          />
+                        </svg>
+                        Детальная аналитика
+                        <span>→</span>
                       </button>
                     </div>
                   </motion.div>
