@@ -2,10 +2,16 @@ import { useState, useCallback } from "react";
 import { DefaultApi, ToiletResDto } from "../../features/lib";
 import { apiConfig } from "../../config/api";
 
+interface TimeFilter {
+  from: Date | null;
+  to: Date | null;
+}
+
 interface UseAnalytic {
   toilets: ToiletResDto[];
   loading: boolean;
   error: string | null;
+  timeFilter: TimeFilter;
   stats: {
     totalToilets: number;
     totalRatings: number;
@@ -23,12 +29,18 @@ interface UseAnalytic {
   };
   fetch: () => Promise<void>;
   refetch: () => Promise<void>;
+  setTimeFilter: (filter: TimeFilter) => void;
 }
 
 export function useAnalytic(): UseAnalytic {
   const [toilets, setToilets] = useState<ToiletResDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [timeFilter, setTimeFilter] = useState<TimeFilter>({
+    from: null,
+    to: null,
+  });
+
   const [stats, setStats] = useState({
     totalToilets: 0,
     totalRatings: 0,
@@ -47,17 +59,41 @@ export function useAnalytic(): UseAnalytic {
 
   const api = new DefaultApi(apiConfig);
 
+  const filterRatingsByDate = useCallback(
+    (ratings: any[]) => {
+      if (!timeFilter.from && !timeFilter.to) return ratings;
+
+      return ratings.filter((rating) => {
+        const ratingDate = new Date(rating.createdAt);
+
+        if (timeFilter.from && ratingDate < timeFilter.from) return false;
+        if (timeFilter.to && ratingDate > timeFilter.to) return false;
+
+        return true;
+      });
+    },
+    [timeFilter.from, timeFilter.to],
+  );
+
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
 
     try {
       const toiletsData = await api.toiletsControllerGetAllToilets();
-      setToilets(toiletsData);
 
-      const allRatings = toiletsData.flatMap((toilet) => toilet.ratings || []);
+      const filteredToilets = toiletsData.map((toilet) => ({
+        ...toilet,
+        ratings: filterRatingsByDate(toilet.ratings || []),
+      }));
 
-      const totalToilets = toiletsData.length;
+      setToilets(filteredToilets);
+
+      const allRatings = filteredToilets.flatMap(
+        (toilet) => toilet.ratings || [],
+      );
+
+      const totalToilets = filteredToilets.length;
       const totalRatings = allRatings.length;
 
       const totalSmell = allRatings.reduce((sum, r) => sum + r.smellRating, 0);
@@ -78,7 +114,7 @@ export function useAnalytic(): UseAnalytic {
         totalRatings > 0 ? (soapCount / totalRatings) * 100 : 0;
       const satisfactionRate = (avgRating / 5) * 100;
 
-      const toiletRatings = toiletsData.map((toilet) => {
+      const toiletRatings = filteredToilets.map((toilet) => {
         const toiletRatingsList = toilet.ratings || [];
 
         const avgRatingValue =
@@ -136,14 +172,20 @@ export function useAnalytic(): UseAnalytic {
     } finally {
       setLoading(false);
     }
-  }, [api]);
+  }, [api, filterRatingsByDate]);
+
+  const handleSetTimeFilter = useCallback((filter: TimeFilter) => {
+    setTimeFilter(filter);
+  }, []);
 
   return {
     toilets,
     loading,
     error,
+    timeFilter,
     stats,
     fetch: fetchData,
     refetch: fetchData,
+    setTimeFilter: handleSetTimeFilter,
   };
 }
