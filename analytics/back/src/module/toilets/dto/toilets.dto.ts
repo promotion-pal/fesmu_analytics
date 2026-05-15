@@ -8,7 +8,10 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { TOILET_LOCATION, TOILET_PERSON } from '../enum/toilets.enum';
-import { ToiletCreateRatingDto } from './toilets-rating.dto';
+import {
+  ToiletCreateRatingDto,
+  ToiletRatingResDto,
+} from './toilets-rating.dto';
 
 export class ToiletCreateDto {
   @ApiProperty({
@@ -60,18 +63,20 @@ export class ToiletResDto extends ToiletCreateDto {
   })
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => ToiletCreateRatingDto)
-  ratings: ToiletCreateRatingDto[];
+  @Type(() => ToiletRatingResDto)
+  ratings: ToiletRatingResDto[];
 
   @ApiProperty({
     example: '2024-01-15T10:30:00Z',
     description: 'Дата создания записи',
   })
+  @Type(() => Date)
   createdAt: Date;
 
   @ApiProperty({
     example: '2024-01-15T12:45:00Z',
     description: 'Дата последнего обновления',
   })
+  @Type(() => Date)
   updatedAt: Date;
 }

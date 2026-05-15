@@ -1,14 +1,10 @@
 import { useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import { CommonInfoTooltip } from "../../shared/ui/info";
-import {
-  ErrorMessage,
-  LoadingSpinner,
-  MetricCard,
-  useAnalytic,
-} from "../analytic";
+import { ErrorMessage, LoadingSpinner, MetricCard } from "../analytic";
 import { scrollToSection } from "../../features/utils/scroll";
 import { CommonFilterDate } from "../../shared/filter";
+import { useAnalytic } from "../analytic/analytic.fn";
 
 export function DashboardPage() {
   const totalToiletsRef = useRef<HTMLDivElement>(null);
