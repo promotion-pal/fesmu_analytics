@@ -34,7 +34,7 @@ export function DashboardPage() {
 
   useEffect(() => {
     fetch();
-  }, [timeFilter]);
+  }, []);
 
   if (loading) {
     return <LoadingSpinner />;

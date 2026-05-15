@@ -59,20 +59,108 @@ export function useAnalytic(): UseAnalytic {
 
   const api = new DefaultApi(apiConfig);
 
-  const filterRatingsByDate = useCallback(
-    (ratings: any[]) => {
-      if (!timeFilter.from && !timeFilter.to) return ratings;
+  const filterRatingsByDate = (ratings: any[], filter: TimeFilter) => {
+    if (!filter.from && !filter.to) return ratings;
 
-      return ratings.filter((rating) => {
-        const ratingDate = new Date(rating.createdAt);
+    return ratings.filter((rating) => {
+      const ratingDate = new Date(rating.createdAt);
+      if (filter.from && ratingDate < filter.from) return false;
+      if (filter.to && ratingDate > filter.to) return false;
+      return true;
+    });
+  };
 
-        if (timeFilter.from && ratingDate < timeFilter.from) return false;
-        if (timeFilter.to && ratingDate > timeFilter.to) return false;
+  const applyFilterToToilets = (data: ToiletResDto[], filter: TimeFilter) => {
+    return data.map((toilet) => ({
+      ...toilet,
+      ratings: filterRatingsByDate(toilet.ratings || [], filter),
+    }));
+  };
 
-        return true;
-      });
+  const calculateStatsFromToilets = (filteredToilets: ToiletResDto[]) => {
+    const allRatings = filteredToilets.flatMap(
+      (toilet) => toilet.ratings || [],
+    );
+
+    const totalToilets = filteredToilets.length;
+    const totalRatings = allRatings.length;
+
+    const totalSmell = allRatings.reduce((sum, r) => sum + r.smellRating, 0);
+    const totalPurity = allRatings.reduce((sum, r) => sum + r.purityRating, 0);
+    const avgSmell = totalRatings > 0 ? totalSmell / totalRatings : 0;
+    const avgPurity = totalRatings > 0 ? totalPurity / totalRatings : 0;
+    const avgRating = (avgSmell + avgPurity) / 2;
+
+    const paperCount = allRatings.filter((r) => r.hasToiletPaper).length;
+    const soapCount = allRatings.filter((r) => r.hasSoap).length;
+
+    const paperAvailabilityPercent =
+      totalRatings > 0 ? (paperCount / totalRatings) * 100 : 0;
+    const soapAvailabilityPercent =
+      totalRatings > 0 ? (soapCount / totalRatings) * 100 : 0;
+    const satisfactionRate = (avgRating / 5) * 100;
+
+    const toiletRatings = filteredToilets.map((toilet) => {
+      const toiletRatingsList = toilet.ratings || [];
+
+      const avgRatingValue =
+        toiletRatingsList.length > 0
+          ? toiletRatingsList.reduce(
+              (sum, r) => sum + (r.smellRating + r.purityRating) / 2,
+              0,
+            ) / toiletRatingsList.length
+          : 0;
+
+      return {
+        toilet,
+        avgRating: avgRatingValue,
+        ratingCount: toiletRatingsList.length,
+      };
+    });
+
+    const topRated = [...toiletRatings]
+      .sort((a, b) => b.avgRating - a.avgRating)
+      .slice(0, 5)
+      .map((item) => item.toilet);
+
+    const worstRated = [...toiletRatings]
+      .sort((a, b) => a.avgRating - b.avgRating)
+      .filter((item) => item.ratingCount > 0)
+      .slice(0, 5)
+      .map((item) => item.toilet);
+
+    const mostActiveToiletData = [...toiletRatings]
+      .sort((a, b) => b.ratingCount - a.ratingCount)
+      .slice(0, 1)[0];
+
+    setStats({
+      totalToilets,
+      totalRatings,
+      averageSmellRating: Math.round(avgSmell * 10) / 10,
+      averagePurityRating: Math.round(avgPurity * 10) / 10,
+      toiletsWithPaper: paperCount,
+      toiletsWithSoap: soapCount,
+      topRatedToilets: topRated,
+      worstRatedToilets: worstRated,
+      averageRating: Math.round(avgRating * 10) / 10,
+      satisfactionRate: Math.round(satisfactionRate),
+      mostActiveToilet: {
+        id: mostActiveToiletData?.toilet?.id || 0,
+        name: mostActiveToiletData?.toilet?.name || "Нет данных",
+        ratingCount: mostActiveToiletData?.ratingCount || 0,
+      },
+      paperAvailabilityPercent: Math.round(paperAvailabilityPercent),
+      soapAvailabilityPercent: Math.round(soapAvailabilityPercent),
+    });
+  };
+
+  const updateData = useCallback(
+    (rawData: ToiletResDto[], filter: TimeFilter) => {
+      const filtered = applyFilterToToilets(rawData, filter);
+      setToilets(filtered);
+      calculateStatsFromToilets(filtered);
     },
-    [timeFilter.from, timeFilter.to],
+    [],
   );
 
   const fetchData = useCallback(async () => {
@@ -81,101 +169,22 @@ export function useAnalytic(): UseAnalytic {
 
     try {
       const toiletsData = await api.toiletsControllerGetAllToilets();
-
-      const filteredToilets = toiletsData.map((toilet) => ({
-        ...toilet,
-        ratings: filterRatingsByDate(toilet.ratings || []),
-      }));
-
-      setToilets(filteredToilets);
-
-      const allRatings = filteredToilets.flatMap(
-        (toilet) => toilet.ratings || [],
-      );
-
-      const totalToilets = filteredToilets.length;
-      const totalRatings = allRatings.length;
-
-      const totalSmell = allRatings.reduce((sum, r) => sum + r.smellRating, 0);
-      const totalPurity = allRatings.reduce(
-        (sum, r) => sum + r.purityRating,
-        0,
-      );
-      const avgSmell = totalRatings > 0 ? totalSmell / totalRatings : 0;
-      const avgPurity = totalRatings > 0 ? totalPurity / totalRatings : 0;
-      const avgRating = (avgSmell + avgPurity) / 2;
-
-      const paperCount = allRatings.filter((r) => r.hasToiletPaper).length;
-      const soapCount = allRatings.filter((r) => r.hasSoap).length;
-
-      const paperAvailabilityPercent =
-        totalRatings > 0 ? (paperCount / totalRatings) * 100 : 0;
-      const soapAvailabilityPercent =
-        totalRatings > 0 ? (soapCount / totalRatings) * 100 : 0;
-      const satisfactionRate = (avgRating / 5) * 100;
-
-      const toiletRatings = filteredToilets.map((toilet) => {
-        const toiletRatingsList = toilet.ratings || [];
-
-        const avgRatingValue =
-          toiletRatingsList.length > 0
-            ? toiletRatingsList.reduce(
-                (sum, r) => sum + (r.smellRating + r.purityRating) / 2,
-                0,
-              ) / toiletRatingsList.length
-            : 0;
-
-        return {
-          toilet,
-          avgRating: avgRatingValue,
-          ratingCount: toiletRatingsList.length,
-        };
-      });
-
-      const topRated = [...toiletRatings]
-        .sort((a, b) => b.avgRating - a.avgRating)
-        .slice(0, 5)
-        .map((item) => item.toilet);
-
-      const worstRated = [...toiletRatings]
-        .sort((a, b) => a.avgRating - b.avgRating)
-        .filter((item) => item.ratingCount > 0)
-        .slice(0, 5)
-        .map((item) => item.toilet);
-
-      const mostActiveToiletData = [...toiletRatings]
-        .sort((a, b) => b.ratingCount - a.ratingCount)
-        .slice(0, 1)[0];
-
-      setStats({
-        totalToilets,
-        totalRatings,
-        averageSmellRating: Math.round(avgSmell * 10) / 10,
-        averagePurityRating: Math.round(avgPurity * 10) / 10,
-        toiletsWithPaper: paperCount,
-        toiletsWithSoap: soapCount,
-        topRatedToilets: topRated,
-        worstRatedToilets: worstRated,
-        averageRating: Math.round(avgRating * 10) / 10,
-        satisfactionRate: Math.round(satisfactionRate),
-        mostActiveToilet: {
-          id: mostActiveToiletData?.toilet?.id || 0,
-          name: mostActiveToiletData?.toilet?.name || "Нет данных",
-          ratingCount: mostActiveToiletData?.ratingCount || 0,
-        },
-        paperAvailabilityPercent: Math.round(paperAvailabilityPercent),
-        soapAvailabilityPercent: Math.round(soapAvailabilityPercent),
-      });
+      updateData(toiletsData, timeFilter);
     } catch (err) {
       setError("Ошибка при загрузке данных");
       console.error("Error fetching data:", err);
     } finally {
       setLoading(false);
     }
-  }, [api, filterRatingsByDate]);
+  }, [api, timeFilter, updateData]);
 
   const handleSetTimeFilter = useCallback((filter: TimeFilter) => {
     setTimeFilter(filter);
+    setToilets((currentToilets) => {
+      const filtered = applyFilterToToilets(currentToilets, filter);
+      calculateStatsFromToilets(filtered);
+      return filtered;
+    });
   }, []);
 
   return {
