@@ -101,7 +101,7 @@ export function CommonFilterDate({
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute right-0 mt-2 w-72 bg-bg border border-border rounded-lg shadow-theme z-30"
+            className="absolute -left-5 mt-2 w-72 bg-bg border border-border rounded-lg shadow-theme z-30"
           >
             <div className="p-3">
               <div className="space-y-1">
