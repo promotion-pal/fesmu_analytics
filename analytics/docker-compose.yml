@@ -24,13 +24,13 @@ services:
       - traefik-network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.jelly-api.rule=Host(`api.fesmu.promotion-pal.ru`)"
-      - "traefik.http.routers.jelly-api.entrypoints=web"
-      - "traefik.http.routers.jelly-api.middlewares=redirect-to-https"
-      - "traefik.http.routers.jelly-api-secure.rule=Host(`api.fesmu.promotion-pal.ru`)"
-      - "traefik.http.routers.jelly-api-secure.entrypoints=websecure"
-      - "traefik.http.routers.jelly-api-secure.tls.certresolver=letsencrypt"
-      - "traefik.http.services.jelly-api.loadbalancer.server.port=4000"
+      - "traefik.http.routers.fesmu-api.rule=Host(`api.fesmu.promotion-pal.ru`)"
+      - "traefik.http.routers.fesmu-api.entrypoints=web"
+      - "traefik.http.routers.fesmu-api.middlewares=redirect-to-https@docker"
+      - "traefik.http.routers.fesmu-api-secure.rule=Host(`api.fesmu.promotion-pal.ru`)"
+      - "traefik.http.routers.fesmu-api-secure.entrypoints=websecure"
+      - "traefik.http.routers.fesmu-api-secure.tls.certresolver=letsencrypt"
+      - "traefik.http.services.fesmu-api.loadbalancer.server.port=4000"
 
   web:
     container_name: "analytics-web"
@@ -46,13 +46,13 @@ services:
       - traefik-network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.jelly-web.rule=Host(`fesmu.promotion-pal.ru`)"
-      - "traefik.http.routers.jelly-web.entrypoints=web"
-      - "traefik.http.routers.jelly-web.middlewares=redirect-to-https"
-      - "traefik.http.routers.jelly-web-secure.rule=Host(`fesmu.promotion-pal.ru`)"
-      - "traefik.http.routers.jelly-web-secure.entrypoints=websecure"
-      - "traefik.http.routers.jelly-web-secure.tls.certresolver=letsencrypt"
-      - "traefik.http.services.jelly-web.loadbalancer.server.port=4173"
+      - "traefik.http.routers.fesmu-web.rule=Host(`fesmu.promotion-pal.ru`)"
+      - "traefik.http.routers.fesmu-web.entrypoints=web"
+      - "traefik.http.routers.fesmu-web.middlewares=redirect-to-https@docker"
+      - "traefik.http.routers.fesmu-web-secure.rule=Host(`fesmu.promotion-pal.ru`)"
+      - "traefik.http.routers.fesmu-web-secure.entrypoints=websecure"
+      - "traefik.http.routers.fesmu-web-secure.tls.certresolver=letsencrypt"
+      - "traefik.http.services.fesmu-web.loadbalancer.server.port=4173"
 
 volumes:
   postgres_data:
