@@ -2,24 +2,46 @@ services:
   postgres:
     container_name: "analytics-db"
     image: postgres:17
-    env_file:
-      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-root}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-root}
+      POSTGRES_DB: ${POSTGRES_DB:-analytics-db}
+      POSTGRES_HOST_AUTH_METHOD: ${POSTGRES_HOST_AUTH_METHOD:-trust}
     ports:
-      - "${SERVER_POSTGRES_PORT}:${POSTGRES_PORT}"
+      - "${SERVER_POSTGRES_PORT:-5432}:5432"
     restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - traefik-network
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-root} -d ${POSTGRES_DB:-analytics-db}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   back:
     container_name: "analytics-back"
     build:
       context: "./back"
       dockerfile: Dockerfile
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: ${POSTGRES_USER:-root}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-root}
+      DB_NAME: ${POSTGRES_DB:-analytics-db}
+      DB_SSL: "false"
     env_file:
       - .env
     restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - traefik-network
     labels:
@@ -42,6 +64,8 @@ services:
     env_file:
       - .env
     restart: unless-stopped
+    depends_on:
+      - back
     networks:
       - traefik-network
     labels:
@@ -61,3 +85,67 @@ networks:
   traefik-network:
     external: true
     name: traefik-network
+
+# services:
+#   postgres:
+#     container_name: "analytics-db"
+#     image: postgres:17
+#     env_file:
+#       - .env
+#     ports:
+#       - "${SERVER_POSTGRES_PORT}:${POSTGRES_PORT}"
+#     restart: always
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#     networks:
+#       - traefik-network
+
+#   back:
+#     container_name: "analytics-back"
+#     build:
+#       context: "./back"
+#       dockerfile: Dockerfile
+#     env_file:
+#       - .env
+#     restart: unless-stopped
+#     networks:
+#       - traefik-network
+#     labels:
+#       - "traefik.enable=true"
+#       - "traefik.http.routers.jelly-api.rule=Host(`api.fesmu.promotion-pal.ru`)"
+#       - "traefik.http.routers.jelly-api.entrypoints=web"
+#       - "traefik.http.routers.jelly-api.middlewares=redirect-to-https"
+#       - "traefik.http.routers.jelly-api-secure.rule=Host(`api.fesmu.promotion-pal.ru`)"
+#       - "traefik.http.routers.jelly-api-secure.entrypoints=websecure"
+#       - "traefik.http.routers.jelly-api-secure.tls.certresolver=letsencrypt"
+#       - "traefik.http.services.jelly-api.loadbalancer.server.port=4000"
+
+#   web:
+#     container_name: "analytics-web"
+#     build:
+#       context: "./web"
+#       dockerfile: Dockerfile
+#       args:
+#         - NEXT_PUBLIC_API=${NEXT_PUBLIC_API}
+#     env_file:
+#       - .env
+#     restart: unless-stopped
+#     networks:
+#       - traefik-network
+#     labels:
+#       - "traefik.enable=true"
+#       - "traefik.http.routers.jelly-web.rule=Host(`fesmu.promotion-pal.ru`)"
+#       - "traefik.http.routers.jelly-web.entrypoints=web"
+#       - "traefik.http.routers.jelly-web.middlewares=redirect-to-https"
+#       - "traefik.http.routers.jelly-web-secure.rule=Host(`fesmu.promotion-pal.ru`)"
+#       - "traefik.http.routers.jelly-web-secure.entrypoints=websecure"
+#       - "traefik.http.routers.jelly-web-secure.tls.certresolver=letsencrypt"
+#       - "traefik.http.services.jelly-web.loadbalancer.server.port=4173"
+
+# volumes:
+#   postgres_data:
+
+# networks:
+#   traefik-network:
+#     external: true
+#     name: traefik-network
