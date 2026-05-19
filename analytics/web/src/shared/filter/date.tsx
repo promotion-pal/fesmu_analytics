@@ -19,7 +19,7 @@ export function CommonFilterDate({
 
   const presets = [
     { id: "all", label: "📊 За весь период", days: null },
-    { id: "today", label: "📅 Сегодня", days: 1 },
+    { id: "today", label: "📅 Сегодня ", days: 1 },
     { id: "week", label: "📆 За неделю", days: 7 },
     { id: "month", label: "🗓️ За месяц", days: 30 },
     { id: "quarter", label: "📈 За квартал", days: 90 },
