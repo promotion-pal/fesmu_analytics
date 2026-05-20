@@ -33,4 +33,4 @@ jobs:
             git pull
             cd analytics
             docker-compose down
-            docker-compose up -d --build
+            docker-compose -f docker-compose.loc.yml up -d --build

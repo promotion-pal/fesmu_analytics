@@ -1,0 +1,106 @@
+services:
+  postgres:
+    container_name: "analytics-db"
+    image: postgres:17
+    env_file:
+      - .env
+    ports:
+      - "${SERVER_POSTGRES_PORT}:${POSTGRES_PORT}"
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  back:
+    container_name: "analytics-back"
+    build:
+      context: "./back"
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "4000:4000"
+    restart: unless-stopped
+    depends_on:
+      - postgres
+
+  web:
+    container_name: "analytics-web"
+    build:
+      context: "./web"
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API=${NEXT_PUBLIC_API}
+    env_file:
+      - .env
+    ports:
+      - "4173:4173"
+    restart: unless-stopped
+    depends_on:
+      - back
+
+volumes:
+  postgres_data:
+
+# services:
+#   postgres:
+#     container_name: "analytics-db"
+#     image: postgres:17
+#     env_file:
+#       - .env
+#     ports:
+#       - "${SERVER_POSTGRES_PORT}:${POSTGRES_PORT}"
+#     restart: always
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#     networks:
+#       - traefik-network
+
+#   back:
+#     container_name: "analytics-back"
+#     build:
+#       context: "./back"
+#       dockerfile: Dockerfile
+#     env_file:
+#       - .env
+#     restart: unless-stopped
+#     networks:
+#       - traefik-network
+#     labels:
+#       - "traefik.enable=true"
+#       - "traefik.http.routers.fesmu-api.rule=Host(`api.fesmu.promotion-pal.ru`)"
+#       - "traefik.http.routers.fesmu-api.entrypoints=web"
+#       - "traefik.http.routers.fesmu-api.middlewares=redirect-to-https@docker"
+#       - "traefik.http.routers.fesmu-api-secure.rule=Host(`api.fesmu.promotion-pal.ru`)"
+#       - "traefik.http.routers.fesmu-api-secure.entrypoints=websecure"
+#       - "traefik.http.routers.fesmu-api-secure.tls.certresolver=letsencrypt"
+#       - "traefik.http.services.fesmu-api.loadbalancer.server.port=4000"
+
+#   web:
+#     container_name: "analytics-web"
+#     build:
+#       context: "./web"
+#       dockerfile: Dockerfile
+#       args:
+#         - NEXT_PUBLIC_API=${NEXT_PUBLIC_API}
+#     env_file:
+#       - .env
+#     restart: unless-stopped
+#     networks:
+#       - traefik-network
+#     labels:
+#       - "traefik.enable=true"
+#       - "traefik.http.routers.fesmu-web.rule=Host(`fesmu.promotion-pal.ru`)"
+#       - "traefik.http.routers.fesmu-web.entrypoints=web"
+#       - "traefik.http.routers.fesmu-web.middlewares=redirect-to-https@docker"
+#       - "traefik.http.routers.fesmu-web-secure.rule=Host(`fesmu.promotion-pal.ru`)"
+#       - "traefik.http.routers.fesmu-web-secure.entrypoints=websecure"
+#       - "traefik.http.routers.fesmu-web-secure.tls.certresolver=letsencrypt"
+#       - "traefik.http.services.fesmu-web.loadbalancer.server.port=4173"
+
+# volumes:
+#   postgres_data:
+
+# networks:
+#   traefik-network:
+#     external: true
+#     name: traefik-network
