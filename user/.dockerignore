@@ -1,0 +1,90 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Node modules
+**/node_modules
+**/node_modules/
+
+# Build outputs
+**/dist
+**/build
+**/.next
+**/out
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+# Logs
+**/*.log
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/pnpm-debug.log*
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Testing
+**/coverage
+**/.nyc_output
+**/jest.config.js
+**/*.test.ts
+**/*.spec.ts
+**/*.test.tsx
+**/*.spec.tsx
+
+# Temp files
+**/tmp
+**/temp
+**/.tmp
+**/.temp
+*.tmp
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
+.docker
+
+# Documentation
+**/README.md
+**/CHANGELOG.md
+**/LICENSE
+**/docs
+
+# CI/CD
+.github
+.gitlab
+.husky
+.vscode
+
+# Cache
+**/.cache
+**/.parcel-cache
+**/.eslintcache
+**/.prettiercache
+
+# Uploads (should be volume)
+**/uploads
+**/uploads_volume
+
+# TypeScript
+**/tsconfig.tsbuildinfo
+**/.tsbuildinfo
+
+# Misc
+*.pid
+*.seed
+*.pid.lock

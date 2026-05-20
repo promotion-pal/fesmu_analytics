@@ -1,2 +1,2 @@
-export { useAnalytic } from "./analytic.fn";
+export { useAnalytic } from "./analytic.old.fn";
 export { ErrorMessage, LoadingSpinner, MetricCard } from "./analytic.ui";

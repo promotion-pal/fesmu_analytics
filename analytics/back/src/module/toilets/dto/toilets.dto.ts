@@ -7,11 +7,12 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { TOILET_LOCATION, TOILET_PERSON } from '../enum/toilets.enum';
+import { TOILET_PERSON } from '../enum/toilets.enum';
 import {
   ToiletCreateRatingDto,
   ToiletRatingResDto,
 } from './toilets-rating.dto';
+import { SURVEY_LOCATION } from 'src/module/survey/enum/survey.enum';
 
 export class ToiletCreateDto {
   @ApiProperty({
@@ -24,12 +25,12 @@ export class ToiletCreateDto {
   name: string;
 
   @ApiProperty({
-    enum: TOILET_LOCATION,
-    example: TOILET_LOCATION.FIRST_BUILDING,
+    enum: SURVEY_LOCATION,
+    example: SURVEY_LOCATION.FIRST_BUILDING,
     description: 'Местоположение туалета',
     required: true,
   })
-  location: TOILET_LOCATION;
+  location: SURVEY_LOCATION;
 
   @ApiProperty({
     enum: TOILET_PERSON,

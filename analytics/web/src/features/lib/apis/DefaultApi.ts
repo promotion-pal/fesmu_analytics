@@ -14,6 +14,26 @@
 
 import * as runtime from '../runtime';
 import {
+    type LectureHallCreateDto,
+    LectureHallCreateDtoFromJSON,
+    LectureHallCreateDtoToJSON,
+} from '../models/LectureHallCreateDto';
+import {
+    type LectureHallRatingCreateDto,
+    LectureHallRatingCreateDtoFromJSON,
+    LectureHallRatingCreateDtoToJSON,
+} from '../models/LectureHallRatingCreateDto';
+import {
+    type LectureHallRatingResDto,
+    LectureHallRatingResDtoFromJSON,
+    LectureHallRatingResDtoToJSON,
+} from '../models/LectureHallRatingResDto';
+import {
+    type LectureHallResDto,
+    LectureHallResDtoFromJSON,
+    LectureHallResDtoToJSON,
+} from '../models/LectureHallResDto';
+import {
     type ToiletCreateDto,
     ToiletCreateDtoFromJSON,
     ToiletCreateDtoToJSON,
@@ -33,6 +53,23 @@ import {
     ToiletResDtoFromJSON,
     ToiletResDtoToJSON,
 } from '../models/ToiletResDto';
+
+export interface LectureHallControllerAddRatingRequest {
+    id: number;
+    lectureHallRatingCreateDto: LectureHallRatingCreateDto;
+}
+
+export interface LectureHallControllerCreateLectureHallRequest {
+    lectureHallCreateDto: LectureHallCreateDto;
+}
+
+export interface LectureHallControllerGetLectureHallByIdRequest {
+    id: number;
+}
+
+export interface LectureHallControllerGetRatingsByLectureHallRequest {
+    id: number;
+}
 
 export interface ToiletsControllerAddRatingRequest {
     id: number;
@@ -55,6 +92,272 @@ export interface ToiletsControllerGetToiletByIdRequest {
  * 
  */
 export class DefaultApi extends runtime.BaseAPI {
+
+    /**
+     * Creates request options for lectureHallControllerAddRating without sending the request
+     */
+    async lectureHallControllerAddRatingRequestOpts(requestParameters: LectureHallControllerAddRatingRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling lectureHallControllerAddRating().'
+            );
+        }
+
+        if (requestParameters['lectureHallRatingCreateDto'] == null) {
+            throw new runtime.RequiredError(
+                'lectureHallRatingCreateDto',
+                'Required parameter "lectureHallRatingCreateDto" was null or undefined when calling lectureHallControllerAddRating().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/lecture-hall/{id}/ratings`;
+        urlPath = urlPath.replace('{id}', encodeURIComponent(String(requestParameters['id'])));
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: LectureHallRatingCreateDtoToJSON(requestParameters['lectureHallRatingCreateDto']),
+        };
+    }
+
+    /**
+     * Добавить отзыв к лекционному залу
+     */
+    async lectureHallControllerAddRatingRaw(requestParameters: LectureHallControllerAddRatingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LectureHallRatingResDto>> {
+        const requestOptions = await this.lectureHallControllerAddRatingRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => LectureHallRatingResDtoFromJSON(jsonValue));
+    }
+
+    /**
+     * Добавить отзыв к лекционному залу
+     */
+    async lectureHallControllerAddRating(requestParameters: LectureHallControllerAddRatingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LectureHallRatingResDto> {
+        const response = await this.lectureHallControllerAddRatingRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for lectureHallControllerCreateLectureHall without sending the request
+     */
+    async lectureHallControllerCreateLectureHallRequestOpts(requestParameters: LectureHallControllerCreateLectureHallRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['lectureHallCreateDto'] == null) {
+            throw new runtime.RequiredError(
+                'lectureHallCreateDto',
+                'Required parameter "lectureHallCreateDto" was null or undefined when calling lectureHallControllerCreateLectureHall().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/lecture-hall`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: LectureHallCreateDtoToJSON(requestParameters['lectureHallCreateDto']),
+        };
+    }
+
+    /**
+     * Создать новый лекционный зал
+     */
+    async lectureHallControllerCreateLectureHallRaw(requestParameters: LectureHallControllerCreateLectureHallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LectureHallResDto>> {
+        const requestOptions = await this.lectureHallControllerCreateLectureHallRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => LectureHallResDtoFromJSON(jsonValue));
+    }
+
+    /**
+     * Создать новый лекционный зал
+     */
+    async lectureHallControllerCreateLectureHall(requestParameters: LectureHallControllerCreateLectureHallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LectureHallResDto> {
+        const response = await this.lectureHallControllerCreateLectureHallRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for lectureHallControllerGetAllLectureHalls without sending the request
+     */
+    async lectureHallControllerGetAllLectureHallsRequestOpts(): Promise<runtime.RequestOpts> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/lecture-hall`;
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Получить все лекционные залы с отзывами
+     */
+    async lectureHallControllerGetAllLectureHallsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<LectureHallResDto>>> {
+        const requestOptions = await this.lectureHallControllerGetAllLectureHallsRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(LectureHallResDtoFromJSON));
+    }
+
+    /**
+     * Получить все лекционные залы с отзывами
+     */
+    async lectureHallControllerGetAllLectureHalls(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<LectureHallResDto>> {
+        const response = await this.lectureHallControllerGetAllLectureHallsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for lectureHallControllerGetAllRatings without sending the request
+     */
+    async lectureHallControllerGetAllRatingsRequestOpts(): Promise<runtime.RequestOpts> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/lecture-hall/ratings`;
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Получить все отзывы о лекционных залах
+     */
+    async lectureHallControllerGetAllRatingsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<LectureHallRatingResDto>>> {
+        const requestOptions = await this.lectureHallControllerGetAllRatingsRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(LectureHallRatingResDtoFromJSON));
+    }
+
+    /**
+     * Получить все отзывы о лекционных залах
+     */
+    async lectureHallControllerGetAllRatings(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<LectureHallRatingResDto>> {
+        const response = await this.lectureHallControllerGetAllRatingsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for lectureHallControllerGetLectureHallById without sending the request
+     */
+    async lectureHallControllerGetLectureHallByIdRequestOpts(requestParameters: LectureHallControllerGetLectureHallByIdRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling lectureHallControllerGetLectureHallById().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/lecture-hall/{id}`;
+        urlPath = urlPath.replace('{id}', encodeURIComponent(String(requestParameters['id'])));
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Получить лекционный зал по ID с его отзывами
+     */
+    async lectureHallControllerGetLectureHallByIdRaw(requestParameters: LectureHallControllerGetLectureHallByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LectureHallResDto>> {
+        const requestOptions = await this.lectureHallControllerGetLectureHallByIdRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => LectureHallResDtoFromJSON(jsonValue));
+    }
+
+    /**
+     * Получить лекционный зал по ID с его отзывами
+     */
+    async lectureHallControllerGetLectureHallById(requestParameters: LectureHallControllerGetLectureHallByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LectureHallResDto> {
+        const response = await this.lectureHallControllerGetLectureHallByIdRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for lectureHallControllerGetRatingsByLectureHall without sending the request
+     */
+    async lectureHallControllerGetRatingsByLectureHallRequestOpts(requestParameters: LectureHallControllerGetRatingsByLectureHallRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling lectureHallControllerGetRatingsByLectureHall().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/lecture-hall/{id}/ratings`;
+        urlPath = urlPath.replace('{id}', encodeURIComponent(String(requestParameters['id'])));
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Получить все отзывы конкретного лекционного зала
+     */
+    async lectureHallControllerGetRatingsByLectureHallRaw(requestParameters: LectureHallControllerGetRatingsByLectureHallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<LectureHallRatingResDto>>> {
+        const requestOptions = await this.lectureHallControllerGetRatingsByLectureHallRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(LectureHallRatingResDtoFromJSON));
+    }
+
+    /**
+     * Получить все отзывы конкретного лекционного зала
+     */
+    async lectureHallControllerGetRatingsByLectureHall(requestParameters: LectureHallControllerGetRatingsByLectureHallRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<LectureHallRatingResDto>> {
+        const response = await this.lectureHallControllerGetRatingsByLectureHallRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Creates request options for toiletsControllerAddRating without sending the request

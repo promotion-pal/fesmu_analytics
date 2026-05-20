@@ -1,0 +1,13 @@
+services:
+  postgres:
+    container_name: "fesmu_user_db"
+    image: postgres:17
+    env_file:
+      - .env
+    ports:
+      - "${SERVER_POSTGRES_PORT}:${POSTGRES_PORT}"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+volumes:
+  postgres_data:
