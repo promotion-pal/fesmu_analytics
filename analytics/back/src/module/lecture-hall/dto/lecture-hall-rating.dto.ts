@@ -16,6 +16,7 @@ export class LectureHallRatingCreateDto extends SurveyRatingCreateDto {
   @Min(1)
   @Max(5)
   cleanliness: number;
+
   @ApiProperty({
     description: 'Комфортность',
     minimum: 1,
@@ -26,6 +27,7 @@ export class LectureHallRatingCreateDto extends SurveyRatingCreateDto {
   @Min(1)
   @Max(5)
   comfort: number;
+
   @ApiProperty({
     description: 'Оснащённость орг. техникой',
     minimum: 1,

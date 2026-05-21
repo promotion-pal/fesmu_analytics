@@ -20,6 +20,12 @@ import { mapValues } from '../runtime';
  */
 export interface LectureHallRatingCreateDto {
     /**
+     * Комментарий пользователя
+     * @type {string}
+     * @memberof LectureHallRatingCreateDto
+     */
+    comment: string;
+    /**
      * Чистота в зале
      * @type {number}
      * @memberof LectureHallRatingCreateDto
@@ -43,6 +49,7 @@ export interface LectureHallRatingCreateDto {
  * Check if a given object implements the LectureHallRatingCreateDto interface.
  */
 export function instanceOfLectureHallRatingCreateDto(value: object): value is LectureHallRatingCreateDto {
+    if (!('comment' in value) || value['comment'] === undefined) return false;
     if (!('cleanliness' in value) || value['cleanliness'] === undefined) return false;
     if (!('comfort' in value) || value['comfort'] === undefined) return false;
     if (!('equipment' in value) || value['equipment'] === undefined) return false;
@@ -59,6 +66,7 @@ export function LectureHallRatingCreateDtoFromJSONTyped(json: any, ignoreDiscrim
     }
     return {
         
+        'comment': json['comment'],
         'cleanliness': json['cleanliness'],
         'comfort': json['comfort'],
         'equipment': json['equipment'],
@@ -76,6 +84,7 @@ export function LectureHallRatingCreateDtoToJSONTyped(value?: LectureHallRatingC
 
     return {
         
+        'comment': value['comment'],
         'cleanliness': value['cleanliness'],
         'comfort': value['comfort'],
         'equipment': value['equipment'],

@@ -20,6 +20,12 @@ import { mapValues } from '../runtime';
  */
 export interface LectureHallRatingResDto {
     /**
+     * Комментарий пользователя
+     * @type {string}
+     * @memberof LectureHallRatingResDto
+     */
+    comment: string;
+    /**
      * Чистота в зале
      * @type {number}
      * @memberof LectureHallRatingResDto
@@ -61,6 +67,7 @@ export interface LectureHallRatingResDto {
  * Check if a given object implements the LectureHallRatingResDto interface.
  */
 export function instanceOfLectureHallRatingResDto(value: object): value is LectureHallRatingResDto {
+    if (!('comment' in value) || value['comment'] === undefined) return false;
     if (!('cleanliness' in value) || value['cleanliness'] === undefined) return false;
     if (!('comfort' in value) || value['comfort'] === undefined) return false;
     if (!('equipment' in value) || value['equipment'] === undefined) return false;
@@ -80,6 +87,7 @@ export function LectureHallRatingResDtoFromJSONTyped(json: any, ignoreDiscrimina
     }
     return {
         
+        'comment': json['comment'],
         'cleanliness': json['cleanliness'],
         'comfort': json['comfort'],
         'equipment': json['equipment'],
@@ -100,6 +108,7 @@ export function LectureHallRatingResDtoToJSONTyped(value?: LectureHallRatingResD
 
     return {
         
+        'comment': value['comment'],
         'cleanliness': value['cleanliness'],
         'comfort': value['comfort'],
         'equipment': value['equipment'],

@@ -6,6 +6,7 @@
 
 Name | Type
 ------------ | -------------
+`comment` | string
 `cleanliness` | number
 `comfort` | number
 `equipment` | number
@@ -20,6 +21,7 @@ import type { LectureHallRatingResDto } from ''
 
 // TODO: Update the object below with actual values
 const example = {
+  "comment": Чисто, но нет бумаги,
   "cleanliness": 5,
   "comfort": 4,
   "equipment": 3,

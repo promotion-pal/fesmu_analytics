@@ -59,6 +59,7 @@ export class LectureHallController {
     @Param('id') id: number,
     @Body() createRatingDto: LectureHallRatingCreateDto,
   ) {
+    console.log(createRatingDto);
     return await this.lectureHallService.addRating(id, createRatingDto);
   }
 }

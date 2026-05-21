@@ -1,7 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
+import { IsString } from 'class-validator';
 
-export class SurveyRatingCreateDto {}
+export class SurveyRatingCreateDto {
+  @ApiProperty({
+    example: 'Чисто, но нет бумаги',
+    description: 'Комментарий пользователя',
+    required: true,
+  })
+  @IsString()
+  comment: string;
+}
 
 export class SurveyRatingResDto extends SurveyRatingCreateDto {
   @ApiProperty({
