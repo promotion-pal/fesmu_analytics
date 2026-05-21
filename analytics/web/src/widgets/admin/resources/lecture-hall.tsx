@@ -26,7 +26,11 @@ import {
 } from "react-admin";
 import { Plus, RefreshCw } from "lucide-react";
 import { CommonInfoTooltip } from "../../../shared/ui/info";
-import { EntityDetailsModal, MetricCard } from "../../analytic/analytic.ui";
+import {
+  EntityDetailsModal,
+  lectureHallEntityConfig,
+  MetricCard,
+} from "../../analytic/analytic.ui";
 import { scrollToSection } from "../../../features/utils/scroll";
 import { useAnalytics } from "../../analytic/analytic.fn";
 
