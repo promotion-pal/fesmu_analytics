@@ -410,8 +410,6 @@ function ToiletDetailsModal({
 
 export { ErrorMessage, MetricCard, LoadingSpinner, ToiletDetailsModal };
 
-import { motion, AnimatePresence } from "motion/react";
-
 export interface EntityDetailsModalProps<T = any> {
   entity: T | null;
   isOpen: boolean;
