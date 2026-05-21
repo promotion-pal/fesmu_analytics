@@ -584,9 +584,6 @@ const LectureHallStats = ({
         </div>
       </motion.div>
 
-      {/* Модальное окно с деталями (нужно создать отдельно для LectureHall) */}
-      {/* <LectureHallDetailsModal hall={selectedHall} isOpen={isModalOpen} onClose={handleCloseModal} /> */}
-
       <EntityDetailsModal
         entity={selectedHall}
         isOpen={isModalOpen}
