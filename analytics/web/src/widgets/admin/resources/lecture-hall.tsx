@@ -26,7 +26,7 @@ import {
 } from "react-admin";
 import { Plus, RefreshCw } from "lucide-react";
 import { CommonInfoTooltip } from "../../../shared/ui/info";
-import { MetricCard } from "../../analytic/analytic.ui";
+import { EntityDetailsModal, MetricCard } from "../../analytic/analytic.ui";
 import { scrollToSection } from "../../../features/utils/scroll";
 import { useAnalytics } from "../../analytic/analytic.fn";
 
@@ -582,6 +582,13 @@ const LectureHallStats = ({
 
       {/* Модальное окно с деталями (нужно создать отдельно для LectureHall) */}
       {/* <LectureHallDetailsModal hall={selectedHall} isOpen={isModalOpen} onClose={handleCloseModal} /> */}
+
+      <EntityDetailsModal
+        entity={selectedHall}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        config={lectureHallEntityConfig}
+      />
     </>
   );
 };
