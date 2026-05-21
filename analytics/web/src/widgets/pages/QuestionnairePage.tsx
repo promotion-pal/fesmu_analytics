@@ -78,7 +78,6 @@ export function QuestionnairePage() {
 
   type Question = RatingQuestion | BooleanQuestion | TextareaQuestion;
 
-  // Вопросы для туалета
   const toiletQuestions: Question[] = [
     {
       title: "🧹 Оцените чистоту",
@@ -138,7 +137,6 @@ export function QuestionnairePage() {
     },
   ];
 
-  // Вопросы для лекционного зала
   const lectureHallQuestions: Question[] = [
     {
       title: "🧹 Оцените чистоту",
@@ -376,7 +374,8 @@ export function QuestionnairePage() {
           <h2>
             {entityType === "toilet"
               ? "Оценка состояния туалета"
-              : "Оценка лекционного зала"}
+              : // : "Оценка лекционного зала"}
+                "Оценка актового зала"}
           </h2>
           <p className="text-text text-sm">
             {entityType === "toilet" ? "Туалет" : "Лекционный зал"} №{mappedId}
