@@ -29,7 +29,7 @@ jobs:
           username: ${{ secrets.SERVER_FESMU_USER }}
           password: ${{ secrets.SERVER_FESMU_PASSWORD }}
           script: |
-            cd ~/fesmu_analytics
+            cd ~/work/fesmu_analytics
             git pull
             cd analytics
             docker-compose down
