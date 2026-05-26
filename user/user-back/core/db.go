@@ -30,7 +30,7 @@ func NewDB() (*gorm.DB, error) {
 
 	dbname := os.Getenv("POSTGRES_DB")
 	if dbname == "" {
-		dbname = "applications_db"
+		dbname = "fesmu_user_db"
 	}
 
 	port := os.Getenv("POSTGRES_PORT")

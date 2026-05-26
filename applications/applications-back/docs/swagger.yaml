@@ -1,0 +1,210 @@
+definitions:
+  models.ApplicationCategory:
+    enum:
+    - plumber
+    - carpenter
+    - electrician
+    type: string
+    x-enum-varnames:
+    - CategoryPlumber
+    - CategoryCarpenter
+    - CategoryElectrician
+  models.ApplicationEntity:
+    properties:
+      category:
+        $ref: '#/definitions/models.ApplicationCategory'
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    required:
+    - category
+    - description
+    - name
+    type: object
+  service.ApplicationCreateDto:
+    properties:
+      category:
+        $ref: '#/definitions/models.ApplicationCategory'
+      description:
+        type: string
+      name:
+        type: string
+    required:
+    - category
+    - description
+    - name
+    type: object
+info:
+  contact: {}
+paths:
+  /applications:
+    get:
+      description: Возвращает массив всех поданных заявок в системе
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ApplicationEntity'
+            type: array
+        "401":
+          description: Missing or invalid token
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Получить список всех заявок
+      tags:
+      - applications
+    post:
+      consumes:
+      - application/json
+      description: Принимает данные заявки и привязывает её к текущему авторизованному
+        пользователю
+      parameters:
+      - description: Данные для создания заявки
+        in: body
+        name: application
+        required: true
+        schema:
+          $ref: '#/definitions/service.ApplicationCreateDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/service.ApplicationCreateDto'
+        "400":
+          description: Invalid JSON или неверные параметры
+          schema:
+            type: string
+        "401":
+          description: Missing or invalid token
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Создать новую заявку
+      tags:
+      - applications
+  /applications/{id}:
+    delete:
+      description: Удаляет запись о заявке из базы данных по её уникальному ID
+      parameters:
+      - description: Идентификатор заявки
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status": "deleted"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid ID
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Удалить заявку
+      tags:
+      - applications
+    get:
+      description: Возвращает полную информацию о конкретной заявке по её идентификатору
+      parameters:
+      - description: Идентификатор заявки
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ApplicationEntity'
+        "400":
+          description: Invalid ID
+          schema:
+            type: string
+        "404":
+          description: Application not found
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Получить заявку по ID
+      tags:
+      - applications
+    put:
+      consumes:
+      - application/json
+      description: Полностью перезаписывает информацию в существующей заявке по её
+        ID
+      parameters:
+      - description: Идентификатор заявки
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Новые данные заявки
+        in: body
+        name: application
+        required: true
+        schema:
+          $ref: '#/definitions/service.ApplicationCreateDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"status": "updated"}'
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid ID или Invalid JSON
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Обновить данные заявки
+      tags:
+      - applications
+swagger: "2.0"

@@ -6,8 +6,11 @@ import (
 	"net/http"
 
 	database "user-back/core"
+	_ "user-back/docs"
 	"user-back/routes/controller"
 	"user-back/routes/service"
+
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 var PORT int = 8080
@@ -15,7 +18,6 @@ var PORT int = 8080
 func main() {
 	log.Println("🚀 Запуск сервера...")
 
-	// Подключаемся к БД
 	db, err := database.NewDB()
 	if err != nil {
 		log.Printf("❌ Ошибка подключения к БД: %v", err)
@@ -36,7 +38,6 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	// Health check
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Hello, back is alive!")
 	})
@@ -50,10 +51,15 @@ func main() {
 		fmt.Fprintf(w, `{"status":"%s","database":"%s"}`, status, dbStatus)
 	})
 
-	// Регистрируем User handlers
+	mux.Handle("/docs/", httpSwagger.WrapHandler)
+
 	userService := service.NewUserService(db)
 	userHandler := controller.NewUserHandler(userService)
 	userHandler.RegisterRoutes(mux)
+
+	authService := service.NewAuthService(db)
+	authHandler := controller.NewAuthHandler(authService, userService)
+	authHandler.RegisterRoutes(mux)
 
 	log.Printf("🌐 Сервер запущен на http://localhost:%d\n", PORT)
 	log.Printf("📋 Доступные эндпоинты:")
@@ -65,5 +71,6 @@ func main() {
 	log.Printf("   GET    /users/email/{email}")
 	log.Printf("   PATCH  /users/{id}/role")
 
+	log.Printf("   GET    /login")
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", PORT), mux))
 }

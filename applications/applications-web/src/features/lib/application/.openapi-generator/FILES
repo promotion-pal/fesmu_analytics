@@ -1,0 +1,12 @@
+apis/ApplicationsApi.ts
+apis/index.ts
+docs/ApplicationsApi.md
+docs/ModelsApplicationCategory.md
+docs/ModelsApplicationEntity.md
+docs/ServiceApplicationCreateDto.md
+index.ts
+models/ModelsApplicationCategory.ts
+models/ModelsApplicationEntity.ts
+models/ServiceApplicationCreateDto.ts
+models/index.ts
+runtime.ts

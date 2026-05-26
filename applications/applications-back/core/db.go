@@ -52,7 +52,7 @@ func NewDB() (*gorm.DB, error) {
 
 	log.Println("✅ Подключение установлено")
 
-	err = db.AutoMigrate(&models.Application{})
+	err = db.AutoMigrate(&models.ApplicationEntity{})
 	if err != nil {
 		return nil, fmt.Errorf("ошибка миграции: %w", err)
 	}

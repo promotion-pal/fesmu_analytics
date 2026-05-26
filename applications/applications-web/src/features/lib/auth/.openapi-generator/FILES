@@ -1,0 +1,9 @@
+.openapi-generator-ignore
+apis/UsersApi.ts
+apis/index.ts
+docs/ModelsUser.md
+docs/UsersApi.md
+index.ts
+models/ModelsUser.ts
+models/index.ts
+runtime.ts

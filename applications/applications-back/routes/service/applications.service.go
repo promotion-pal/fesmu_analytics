@@ -21,8 +21,8 @@ func NewApplicationService(db *gorm.DB) *ApplicationService {
 	return &ApplicationService{db: db}
 }
 
-func (s *ApplicationService) GetAll(ctx context.Context) ([]model.Application, error) {
-	var applications []model.Application
+func (s *ApplicationService) GetAll(ctx context.Context) ([]model.ApplicationEntity, error) {
+	var applications []model.ApplicationEntity
 	result := s.db.WithContext(ctx).Find(&applications)
 	if result.Error != nil {
 		return nil, fmt.Errorf("ошибка запроса: %w", result.Error)
@@ -32,8 +32,8 @@ func (s *ApplicationService) GetAll(ctx context.Context) ([]model.Application, e
 	return applications, nil
 }
 
-func (s *ApplicationService) GetByID(ctx context.Context, id int) (*model.Application, error) {
-	var app model.Application
+func (s *ApplicationService) GetByID(ctx context.Context, id int) (*model.ApplicationEntity, error) {
+	var app model.ApplicationEntity
 	result := s.db.WithContext(ctx).First(&app, id)
 	if result.Error != nil {
 		return nil, fmt.Errorf("приложение с id %d не найдено: %w", id, result.Error)
@@ -42,18 +42,33 @@ func (s *ApplicationService) GetByID(ctx context.Context, id int) (*model.Applic
 	return &app, nil
 }
 
-func (s *ApplicationService) Create(ctx context.Context, app *model.Application) error {
-	result := s.db.WithContext(ctx).Create(app)
+type ApplicationCreateDto struct {
+	model.ApplicationBase
+}
+
+func (s *ApplicationService) Create(ctx context.Context, dto ApplicationCreateDto) error {
+	newApp := model.ApplicationEntity{
+		ApplicationBase: dto.ApplicationBase,
+	}
+
+	result := s.db.WithContext(ctx).Create(&newApp)
 	if result.Error != nil {
 		return fmt.Errorf("ошибка создания: %w", result.Error)
 	}
 
-	log.Printf("✅ Создано приложение: %s (id=%d)", app.Name, app.ID)
 	return nil
 }
 
-func (s *ApplicationService) Update(ctx context.Context, id int, app *model.Application) error {
-	result := s.db.WithContext(ctx).Model(&model.Application{}).Where("id = ?", id).Updates(app)
+func (s *ApplicationService) Update(ctx context.Context, id int, dto ApplicationCreateDto) error {
+	updatedFields := model.ApplicationEntity{
+		ApplicationBase: model.ApplicationBase{
+			Name:        dto.Name,
+			Description: dto.Description,
+		},
+	}
+
+	// Обновляем запись по ID
+	result := s.db.WithContext(ctx).Model(&model.ApplicationEntity{}).Where("id = ?", id).Updates(&updatedFields)
 	if result.Error != nil {
 		return fmt.Errorf("ошибка обновления: %w", result.Error)
 	}
@@ -67,7 +82,7 @@ func (s *ApplicationService) Update(ctx context.Context, id int, app *model.Appl
 }
 
 func (s *ApplicationService) Delete(ctx context.Context, id int) error {
-	result := s.db.WithContext(ctx).Delete(&model.Application{}, id)
+	result := s.db.WithContext(ctx).Delete(&model.ApplicationEntity{}, id)
 	if result.Error != nil {
 		return fmt.Errorf("ошибка удаления: %w", result.Error)
 	}

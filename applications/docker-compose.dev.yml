@@ -1,6 +1,6 @@
 services:
   postgres:
-    container_name: "applications-db"
+    container_name: "applications_db"
     image: postgres:17
     env_file:
       - .env
