@@ -6,6 +6,8 @@ import {
   IsOptional,
   IsString,
   ValidateNested,
+  IsEnum,
+  IsNotEmpty,
 } from 'class-validator';
 import { TOILET_PERSON } from '../enum/toilets.enum';
 import {
@@ -22,7 +24,7 @@ export class ToiletCreateDto {
   })
   @IsString()
   @IsOptional()
-  name: string;
+  name?: string; // Добавьте ? для опциональных полей
 
   @ApiProperty({
     enum: SURVEY_LOCATION,
@@ -30,6 +32,8 @@ export class ToiletCreateDto {
     description: 'Местоположение туалета',
     required: true,
   })
+  @IsEnum(SURVEY_LOCATION)
+  @IsNotEmpty({ message: 'location обязательное поле' })
   location: SURVEY_LOCATION;
 
   @ApiProperty({
@@ -38,6 +42,8 @@ export class ToiletCreateDto {
     description: 'Гендер',
     required: true,
   })
+  @IsEnum(TOILET_PERSON)
+  @IsNotEmpty({ message: 'person обязательное поле' })
   person: TOILET_PERSON;
 
   @ApiProperty({
@@ -45,7 +51,8 @@ export class ToiletCreateDto {
     required: true,
     type: Number,
   })
-  @IsNumber()
+  @IsNumber({}, { message: 'floor должен быть числом' })
+  @IsNotEmpty({ message: 'floor обязательное поле' })
   @Type(() => Number)
   floor: number;
 }
@@ -53,12 +60,12 @@ export class ToiletCreateDto {
 export class ToiletResDto extends ToiletCreateDto {
   @ApiProperty({
     example: 1,
-    description: 'Уникальный идентификатор туалета',
+    description: 'Уникальный идентификатор туалета',
   })
   id: number;
 
   @ApiProperty({
-    type: [ToiletCreateRatingDto],
+    type: [ToiletRatingResDto],
     description: 'Список оценок туалета',
     required: true,
   })
@@ -81,3 +88,87 @@ export class ToiletResDto extends ToiletCreateDto {
   @Type(() => Date)
   updatedAt: Date;
 }
+
+// import { ApiProperty } from '@nestjs/swagger';
+// import { Type } from 'class-transformer';
+// import {
+//   IsArray,
+//   IsNumber,
+//   IsOptional,
+//   IsString,
+//   ValidateNested,
+// } from 'class-validator';
+// import { TOILET_PERSON } from '../enum/toilets.enum';
+// import {
+//   ToiletCreateRatingDto,
+//   ToiletRatingResDto,
+// } from './toilets-rating.dto';
+// import { SURVEY_LOCATION } from 'src/module/survey/enum/survey.enum';
+
+// export class ToiletCreateDto {
+//   @ApiProperty({
+//     example: 'Туалет в ТЦ "Европа"',
+//     description: 'Название или местоположение туалета',
+//     required: false,
+//   })
+//   @IsString()
+//   @IsOptional()
+//   name: string;
+
+//   @ApiProperty({
+//     enum: SURVEY_LOCATION,
+//     example: SURVEY_LOCATION.FIRST_BUILDING,
+//     description: 'Местоположение туалета',
+//     required: true,
+//   })
+//   location: SURVEY_LOCATION;
+
+//   @ApiProperty({
+//     enum: TOILET_PERSON,
+//     example: TOILET_PERSON.MAN,
+//     description: 'Гендер',
+//     required: true,
+//   })
+//   person: TOILET_PERSON;
+
+//   @ApiProperty({
+//     example: 1,
+//     required: true,
+//     type: Number,
+//   })
+//   @IsNumber()
+//   @Type(() => Number)
+//   floor: number;
+// }
+
+// export class ToiletResDto extends ToiletCreateDto {
+//   @ApiProperty({
+//     example: 1,
+//     description: 'Уникальный идентификатор туалета',
+//   })
+//   id: number;
+
+//   @ApiProperty({
+//     type: [ToiletCreateRatingDto],
+//     description: 'Список оценок туалета',
+//     required: true,
+//   })
+//   @IsArray()
+//   @ValidateNested({ each: true })
+//   @Type(() => ToiletRatingResDto)
+//   ratings: ToiletRatingResDto[];
+
+//   @ApiProperty({
+//     example: '2024-01-15T10:30:00Z',
+//     description: 'Дата создания записи',
+//   })
+//   @Type(() => Date)
+//   createdAt: Date;
+
+//   @ApiProperty({
+//     example: '2024-01-15T12:45:00Z',
+//     description: 'Дата последнего обновления',
+//   })
+//   @Type(() => Date)
+//   updatedAt: Date;
+// }
