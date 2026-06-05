@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Delete } from '@nestjs/common';
 import { LectureHallService } from './lecture-hall.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
@@ -61,5 +61,23 @@ export class LectureHallController {
   ) {
     console.log(createRatingDto);
     return await this.lectureHallService.addRating(id, createRatingDto);
+  }
+
+  // НОВЫЕ DELETE МЕТОДЫ:
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Удалить лекционный зал по ID' })
+  @ApiResponse({ status: 200, description: 'Лекционный зал успешно удален' })
+  @ApiResponse({ status: 404, description: 'Лекционный зал не найден' })
+  async deleteLectureHall(@Param('id') id: number) {
+    return await this.lectureHallService.deleteLectureHall(id);
+  }
+
+  @Delete('ratings/:ratingId')
+  @ApiOperation({ summary: 'Удалить отзыв по ID' })
+  @ApiResponse({ status: 200, description: 'Отзыв успешно удален' })
+  @ApiResponse({ status: 404, description: 'Отзыв не найден' })
+  async deleteRating(@Param('ratingId') ratingId: number) {
+    return await this.lectureHallService.deleteRating(ratingId);
   }
 }
